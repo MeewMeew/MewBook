@@ -100,10 +100,10 @@ defineProps({
       <button class="rounded-full bg-[#E3E6EA] p-2 hover:bg-gray-300 mx-1 cursor-pointer">
         <DotsGrid :size="23" fillColor="#050505" />
       </button>
-      <router-link :to="{ name: 'messenger' }" class="rounded-full bg-[#E3E6EA] p-2 hover:bg-gray-300 mx-1 cursor-pointer"
+      <div class="rounded-full bg-[#E3E6EA] p-2 hover:bg-gray-300 mx-1 cursor-pointer"
         :class="{ 'hidden': select === 'messenger' }">
         <FacebookMessenger :size="23" fillColor="#050505" />
-      </router-link>
+      </div>
       <BellButton />
       <div class="flex items-center justify-center relative font-medium">
         <button @click="showMenu = !showMenu">
