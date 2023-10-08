@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nice-scrollbar::-webkit-scrollbar {
+  @apply w-2 invisible pl-2;
+}
+
+.nice-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent pl-2;
+}
+
+.nice-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 rounded-full pl-2;
+}
+
+.avatar {
+  @apply inline-block w-10 h-10 rounded-full overflow-hidden object-cover;
+}
+
+.avatar-lg {
+  @apply w-20 h-20 rounded-full;
+}
