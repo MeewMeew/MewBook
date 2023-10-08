@@ -17,43 +17,43 @@ interface IReactionDefine {
 export const REACTIONS: IReactionDefine[] = [
   {
     name: ReactionType.LIKE,
-    icon: '/reactions-new/like.svg',
+    icon: '/reactions/like.svg',
     gif: '/reactions-gif/like.gif',
     color: '#0084ff'
   },
   {
     name: ReactionType.LOVE,
-    icon: '/reactions-new/love.svg',
+    icon: '/reactions/love.svg',
     gif: '/reactions-gif/love.gif',
     color: '#f33e58'
   },
   {
     name: ReactionType.CARE,
-    icon: '/reactions-new/care.svg',
+    icon: '/reactions/care.svg',
     gif: '/reactions-gif/care.gif',
     color: '#f7b125'
   },
   {
     name: ReactionType.HAHA,
-    icon: '/reactions-new/haha.svg',
+    icon: '/reactions/haha.svg',
     gif: '/reactions-gif/haha.gif',
     color: '#f7b125'
   },
   {
     name: ReactionType.WOW,
-    icon: '/reactions-new/wow.svg',
+    icon: '/reactions/wow.svg',
     gif: '/reactions-gif/wow.gif',
     color: '#f7b125'
   },
   {
     name: ReactionType.SAD,
-    icon: '/reactions-new/sad.svg',
+    icon: '/reactions/sad.svg',
     gif: '/reactions-gif/sad.gif',
     color: '#f7b125'
   },
   {
     name: ReactionType.ANGRY,
-    icon: '/reactions-new/angry.svg',
+    icon: '/reactions/angry.svg',
     gif: '/reactions-gif/angry.gif',
     color: '#e9710f'
   }
