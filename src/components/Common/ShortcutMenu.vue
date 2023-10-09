@@ -18,28 +18,28 @@ const items = ref([
     label: 'Tìm bạn bè',
     to: { name: 'friends' },
     bgImage: true,
-    bgPosition: '0_-296px'
+    bgPosition: '0 -296px',
   },
   {
     icon: 'list-icon.png',
     label: 'Đã lưu',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_-185px'
+    bgPosition: '0 -185px',
   },
   {
     icon: 'list-icon.png',
     label: 'Nhóm của bạn',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_-37px'
+    bgPosition: '0 -37px',
   },
   {
     icon: 'list-icon.png',
     label: 'Marketplace',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_-407px',
+    bgPosition: '0 -407px',
     hide: true,
   },
   {
@@ -47,7 +47,7 @@ const items = ref([
     label: 'Chơi game',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_-74px',
+    bgPosition: '0 -74px',
     hide: true,
   },
   {
@@ -62,7 +62,7 @@ const items = ref([
     label: 'Kỷ niệm',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_-444px',
+    bgPosition: '0 -444px',
     hide: true,
   },
   {
@@ -70,7 +70,7 @@ const items = ref([
     label: 'Messenger',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_0px',
+    bgPosition: '0 0px',
     hide: true,
   },
   {
@@ -78,7 +78,7 @@ const items = ref([
     label: 'Sự kiện',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_0px',
+    bgPosition: '0 0px',
     hide: true,
   },
   {
@@ -86,7 +86,7 @@ const items = ref([
     label: 'Trang',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_-111px',
+    bgPosition: '0 -111px',
     hide: true,
   },
   {
@@ -94,7 +94,7 @@ const items = ref([
     label: 'Video chơi Game',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_0px',
+    bgPosition: '0 0px',
     hide: true,
   },
   {
@@ -102,7 +102,7 @@ const items = ref([
     label: 'Watch',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0_-518px',
+    bgPosition: '0 -518px',
     hide: true,
   },
 ])
@@ -128,8 +128,8 @@ const items = ref([
               <router-link :to="item.to"
                 class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300">
                 <img v-if="!item.bgImage" :src="`/icons/${item.icon}`" class="w-[36px] h-[36px] inline-block" />
-                <i v-else :style="{ backgroundImage: `url(/icons/${item.icon})` }"
-                  :class="`w-[36px] h-[36px] inline-block bg-no-repeat bg-auto bg-[${item.bgPosition}]`" />
+                <i v-else :style="{ backgroundImage: `url(/icons/${item.icon})`, backgroundPosition: item.bgPosition }"
+                  class="w-[36px] h-[36px] inline-block bg-no-repeat bg-auto" />
                 <span class="font-sans font-medium text-sm text-[#050505]">{{ item.label }}</span>
               </router-link>
             </div>

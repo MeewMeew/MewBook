@@ -1,8 +1,7 @@
 {
   "projects": {
     "default": "mew-book",
-    "mew-book": "mew-book",
-    "mewbook": "mew-book"
+    "mew": "mew-book"
   },
   "targets": {},
   "etags": {}
