@@ -9,7 +9,7 @@ import Avatar from 'primevue/avatar';
 import Badge from 'primevue/badge';
 import Skeleton from 'primevue/skeleton';
 import InfiniteLoading from "v3-infinite-loading";
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import Bell from '@/components/Icons/Navbar/Bell.vue'
 import { Attachment } from '@/database';
@@ -87,8 +87,9 @@ const getReaction = (name: ReactionType) => {
 
 
 onMounted(async () => {
-  title.value = `(${notiCount.value}) Mewbook`
-
+  if (notiCount.value > 0) {    
+    title.value = `(${notiCount.value}) Mewbook`
+  }
 
   mewSocket.on(SEvent.NOTIFICATION_CREATE, async (data: INotification) => {
     const user = await User.get({ id: data.data.uid })
@@ -117,6 +118,10 @@ onMounted(async () => {
       notifications.value[index].data = data.data
     }
   })
+})
+
+onUnmounted(() => {
+  title.value = 'Mewbook'
 })
 
 watch(notiCount, (newVal) => {
