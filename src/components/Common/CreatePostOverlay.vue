@@ -15,7 +15,7 @@ import { Privacy } from '@/types'
 const { posts } = storeToRefs(usePost())
 const { isPostOverlay } = storeToRefs(useGeneral())
 
-const { cuser, setUser } = useUser()
+const { cuser } = useUser()
 
 const rows = ref<number>(3)
 const text = ref<string>()
@@ -45,8 +45,6 @@ const createPost = async () => {
     if (post.attachment) {
       const attachment = await Attachment.get(post.attachment as string)
       posts.value?.unshift({ ...post, attachment: attachment.attachments })
-      cuser!.photoURL = imageView.value!
-      setUser(cuser!)
     } else posts.value?.unshift(post)
 
     isPostOverlay.value = false
