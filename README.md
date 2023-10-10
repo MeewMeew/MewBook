@@ -26,6 +26,7 @@ Official Website: [https://mb.mew.id.vn](https://mb.mew.id.vn)
 - Like and comment on posts.
 - Receive real-time notifications for updates.
 - Edit your profile, including changing your avatar and cover image.
+- Find and manage your friends.
 - Enjoy a responsive design.
 
 ## Installation
@@ -39,6 +40,7 @@ npm install
 
 - Create a Firebase project and add a web app to it.
 - Copy the Firebase API key to the .env file:
+- Backend source code: [MeewMeew/facebook-clone-be](https://github.com/MeewMeew/facebook-clone-be)
 
 ```bash
 VITE_FIREBASE_CONFIG=your_config

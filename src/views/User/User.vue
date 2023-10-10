@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import Image from 'primevue/image'
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import CreatePostBox from '@/components/Common/CreatePostBox.vue'
-import PostList from '@/components/Post/PostList.vue'
 import UserHeader from '@/components/User/UserHeader.vue'
+import UserProfile from '@/components/User/UserProfile.vue'
 import { Attachment, Friend, Post, User } from '@/database'
 import { useUser } from '@/stores/user'
 import type { IAttachmentItem, IUser } from '@/types'
@@ -49,65 +47,16 @@ onMounted(async () => {
       else images.value.push({ id: post.id, image: medium })
     }
   }
-
-  watch(() => cuser.value!, (newUser) => {
-    if (newUser) {
-      if (newUser.id === cuser.value?.id) user.value = cuser.value
-      else user.value = newUser
-    }
-  })
 })
 </script>
 
 <template>
   <div class="w-full min-h-[100vh] pb-20 bg-[#F1F2F5] min-w-sm" v-if="cuser">
-    <UserHeader v-if="user" :user="user" />
+    <UserHeader v-if="user" :user="user" :tab="($route.name as string)"/>
 
-    <div class="flex-cols md:flex w-full max-w-[1100px] justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto">
-      <div class="w-full md:w-5/12 mt-4 mr-4">
-        <div class="bg-white p-3 rounded-lg shadow-lg">
-          <div class="font-bold pb-2 text-xl">Giới thiệu</div>
-          <div class="pb-5">
-            <button class="w-full bg-gray-200 hover:bg-gray-300 rounded-lg p-2 font-medium text-sm text-[#050505]">
-              Thêm tiểu sử
-            </button>
-          </div>
-          <div class="pb-5">
-            <button class="w-full bg-gray-200 hover:bg-gray-300 rounded-lg p-2 font-medium text-sm text-[#050505]">
-              Chỉnh sửa chi tiết
-            </button>
-          </div>
-          <div class="pb-5">
-            <button class="w-full bg-gray-200 hover:bg-gray-300 rounded-lg p-2 font-medium text-sm text-[#050505]">
-              Chỉnh sửa sở thích
-            </button>
-          </div>
-          <div>
-            <button class="w-full bg-gray-200 hover:bg-gray-300 rounded-lg p-2 font-medium text-sm text-[#050505]">
-              Thêm nội dung đáng chú ý
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-white p-3 mt-4 rounded-lg shadow-lg sticky z-10 top-20">
-          <div class="font-bold pb-2 text-xl">Ảnh</div>
-          <div class="grid grid-cols-3">
-            <router-link :to="{name: 'post', params: {id: i.id}}" v-for="i in images" :key="i.id" class="rounded-lg">
-              <Image :src="i.image" :pt="{
-                root: 'rounded-lg relative',
-                image: {
-                  class: 'cursor-pointer border-white border-4 border-white aspect-square object-cover rounded-lg cursor-pointer'
-                }
-              }" />
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full md:w-7/12 overflow-y-scroll overflow-x-hidden nice-scrollbar" v-if="cuser">
-        <CreatePostBox v-if="cuser.id === userId" />
-        <PostList scope="user" :uid="userId" :avatar="user?.photoURL" />
-      </div>
+    <div class="flex-cols md:flex w-full max-w-[1100px] justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto" v-if="user">
+      <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'"/>
+      <UserProfile :user="user" v-else/>
     </div>
   </div>
 </template>

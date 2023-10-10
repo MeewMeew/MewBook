@@ -65,7 +65,7 @@ const router = createRouter({
         {
           name: 'fuser',
           path: 'friends',
-          component: () => import('@/views/User/Base.vue'),
+          component: () => import('@/views/User/Friend.vue'),
         }
       ]
     },

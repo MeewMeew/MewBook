@@ -5,7 +5,6 @@ import { ref } from 'vue'
 import DotsGrid from 'vue-material-design-icons/DotsGrid.vue'
 import FacebookMessenger from 'vue-material-design-icons/FacebookMessenger.vue'
 import Logout from 'vue-material-design-icons/Logout.vue'
-import Magnify from 'vue-material-design-icons/Magnify.vue'
 
 import CreatePostOverlay from '@/components/Common/CreatePostOverlay.vue'
 import CropperModal from '@/components/Common/CropperModal.vue'
@@ -45,7 +44,7 @@ defineProps({
 
       <div
         class="flex relative bg-[#EFF2F5] items-center justify-center lg:rounded-[10vw] lg:w-full w-[39px] rounded-full cursor-pointer">
-        <Magnify class="lg:ml-2 lg:p-1 p-2 m-auto" :size="23" fillColor="#64676B" />
+        <i class="pi pi-search lg:ml-2 lg:p-1 p-2 m-auto text-[#64676B] text-lg" />
         <input type="text" placeholder="Tìm kiếm trên Mewbook"
           class="outline-none border-none h-full bg-transparent pt-[.6rem] pr-[1rem] pb-[.6rem] pl-[.25rem] font-[.9rem] w-full hidden lg:block" />
       </div>

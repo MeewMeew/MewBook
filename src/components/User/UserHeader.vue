@@ -19,6 +19,11 @@ const props = defineProps({
   user: {
     type: Object as PropType<IUser>,
     required: true
+  },
+  tab: {
+    type: String,
+    default: 'user',
+    required: false
   }
 })
 
@@ -264,32 +269,37 @@ onBeforeMount(async () => {
         </div>
       </div>
 
-      <div class="flex items-centerw-full border-t h-[50px] py-[4px]">
-        <button class="w-[85px]">
+      <div class="flex items-centerw-full border-t h-[50px] mb-2 pt-2 transition-all">
+        <div class="w-[85px] duration-150">
           <router-link :to="{ name: 'user', params: { id: user.id } }"
-            class="flex items-center text-[15px] justify-center h-[45px] text-blue-500 hover:bg-[#F2F2F2] w-full font-medium rounded-lg cursor-pointer">
+            class="flex items-center text-[15px] justify-center h-[48px] hover:bg-[#F2F2F2] font-medium rounded-lg cursor-pointer"
+            :class="[tab === 'user' ? 'text-blue-500' : '']">
             Bài viết
           </router-link>
-          <div class="border-b-4 border-b-blue-400 rounded-md"></div>
-        </button>
+          <div v-if="tab === 'user'" class="border-t-4 border-t-blue-400 rounded-md w-full"></div>
+        </div>
         <button
-          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-[85px] font-medium rounded-lg mx-1 cursor-pointer">
+          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] font-medium rounded-lg mx-1 cursor-pointer">
           Giới thiệu
         </button>
-        <router-link :to="{ name: 'fuser' }"
-          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-[85px] font-medium rounded-lg mx-1 cursor-pointer">
-          Bạn bè
-        </router-link>
+        <div class="w-[85px]  duration-150">
+          <router-link :to="{ name: 'fuser' }"
+            class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] font-medium rounded-lg mx-1 cursor-pointer"
+            :class="[tab === 'fuser' ? 'text-blue-500' : '']">
+            Bạn bè
+          </router-link>
+          <div v-if="tab === 'fuser'" class="border-t-4 border-t-blue-400 rounded-md w-full"></div>
+        </div>
         <button
-          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-[85px] font-medium rounded-lg mx-1 cursor-pointer">
+          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] font-medium rounded-lg mx-1 cursor-pointer">
           Ảnh
         </button>
         <button
-          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-[85px] font-medium rounded-lg mx-1 cursor-pointer">
+          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] font-medium rounded-lg mx-1 cursor-pointer">
           Video
         </button>
         <button
-          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-[85px] font-medium rounded-lg mx-1 cursor-pointer">
+          class="flex items-center text-[15px] justify-center h-[48px] p-1 hover:bg-[#F2F2F2] font-medium rounded-lg mx-1 cursor-pointer">
           Check in
         </button>
       </div>
