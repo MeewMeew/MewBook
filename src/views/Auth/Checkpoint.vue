@@ -12,18 +12,18 @@ const load = ref(0)
 
 
 onAuthStateChanged(auth, async (userAuth) => {
-  async function reload(userAuth: any = auth.currentUser) {
-    await userAuth?.reload()
-    const user = (await User.get({ authid: userAuth.uid }))
+  async function reload(_userAuth: any = auth.currentUser) {
+    await _userAuth?.reload()
+    const user = (await User.get({ authid: _userAuth.uid }))
     if (!user) {
       return router.push({ name: 'login' })
     }
     load.value++
-    if ((userAuth.emailVerified === true) && !user.verified) {
-      await User.update({ authid: userAuth.uid, verified: userAuth.emailVerified })
+    if ((_userAuth.emailVerified === true) && !user.verified) {
+      await User.update({ authid: _userAuth.uid, verified: _userAuth.emailVerified })
       return router.push({ name: 'dashboard' })
     } else {
-      setTimeout(reload, 5000, userAuth)
+      setTimeout(reload, 3000, _userAuth)
     }
   }
   if (userAuth) {
@@ -35,7 +35,7 @@ onAuthStateChanged(auth, async (userAuth) => {
   <NonVerifyLayout>
     <Card class="w-screen mix-w-sm max-w-2xl h-1/3 bg-white drop-shadow-lg rounded-lg">
       <template #title>
-        <div class="text-4xl font-bold text-gray-700">
+        <div class="text-4xl font-medium text-gray-700">
           <span>Đang chờ xác thực email</span>
         </div>
       </template>
@@ -48,7 +48,7 @@ onAuthStateChanged(auth, async (userAuth) => {
       </template>
       <template #footer>
         <div class="text-gray-500 text-center">
-          <span>@2023 MeewMeew</span>
+          <span>&copy; 2023 Mewbook</span>
         </div>
       </template>
     </Card>

@@ -5,6 +5,7 @@ import Divider from 'primevue/divider'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import NullStatePeople from '@/components/Icons/NullStatePeople.vue';
 import Setting from '@/components/Icons/Setting.vue'
 import UserCard from '@/components/User/UserCard.vue'
 import { Attachment, Friend, User } from '@/database'
@@ -39,11 +40,11 @@ async function loadUsers() {
       }
       if (res.received.includes(user.id.toString())) {
         frequest.value = uniqBy([...frequest.value, user], 'id')
-        continue  
+        continue
       }
       userSuggest.value = uniqBy([...userSuggest.value, user], 'id')
     }
-  } 
+  }
 }
 
 function isRequest(id: number) {
@@ -51,7 +52,7 @@ function isRequest(id: number) {
   return include
 }
 
-onMounted(async() => {
+onMounted(async () => {
   await loadUsers()
 })
 
@@ -66,20 +67,26 @@ onMounted(async() => {
         </div>
       </div>
       <div class="flex flex-col gap-2 mt-3 select-none transition-all">
-        <router-link :to="{ name: 'friends' }" class="w-full h-14 hover:bg-zinc-100 rounded-lg flex flex-row justify-start items-center pl-2 duration-300">
-          <div class="w-9 h-9 rounded-full flex items-center justify-center" :class="[cname === 'friends' ? 'bg-mb-blue' : 'bg-mb-gray']">
-            <img src="/icons/friend/friends.png" alt="friends" class="w-5 h-5" :class="[cname === 'friends' ? 'invert' : '']" />
+        <router-link :to="{ name: 'friends' }"
+          class="w-full h-14 hover:bg-zinc-100 rounded-lg flex flex-row justify-start items-center pl-2 duration-300">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center"
+            :class="[cname === 'friends' ? 'bg-mb-blue' : 'bg-mb-gray']">
+            <img src="/icons/friend/friends.png" alt="friends" class="w-5 h-5"
+              :class="[cname === 'friends' ? 'invert' : '']" />
           </div>
           <span class="text-md text-mb-gray-2 font-semibold text-center px-3">Trang chủ</span>
         </router-link>
-        <router-link :to="{ name: 'frequest' }" class="w-full h-14 hover:bg-zinc-100 rounded-lg pl-2 duration-300 flex items-center">
+        <router-link :to="{ name: 'frequest' }"
+          class="w-full h-14 hover:bg-zinc-100 rounded-lg pl-2 duration-300 flex items-center">
           <div class="flex flex-row justify-start items-center w-full">
-            <div class="w-9 h-9 rounded-full flex items-center justify-center" :class="[cname === 'frequest' ? 'bg-mb-blue' : 'bg-mb-gray']">
-              <img src="/icons/friend/friends.png" alt="friends" class="w-5 h-5" :class="[cname === 'frequest' ? 'invert' : '']" />
+            <div class="w-9 h-9 rounded-full flex items-center justify-center"
+              :class="[cname === 'frequest' ? 'bg-mb-blue' : 'bg-mb-gray']">
+              <img src="/icons/friend/friends.png" alt="friends" class="w-5 h-5"
+                :class="[cname === 'frequest' ? 'invert' : '']" />
             </div>
             <span class="text-md text-mb-gray-2 font-semibold text-center px-3">Lời mời kết bạn</span>
           </div>
-          <i class="pi pi-angle-right text-xl text-mb-gray-2 pr-3"/>
+          <i class="pi pi-angle-right text-xl text-mb-gray-2 pr-3" />
         </router-link>
       </div>
     </template>
@@ -98,9 +105,14 @@ onMounted(async() => {
           <span class="text-lg font-semibold">Những người bạn có thể biết</span>
         </div>
         <div class="flex flex-row flex-wrap mt-5">
-          <UserCard v-for="i of userSuggest" :key="i.id" :user="i" mode="suggest" :is-request="isRequest(i.id)" class="mr-5 mb-5" />
+          <UserCard v-for="i of userSuggest" :key="i.id" :user="i" mode="suggest" :is-request="isRequest(i.id)"
+            class="mr-5 mb-5" />
         </div>
         <Divider />
+      </div>
+      <div v-if="!hasRequest && !hasSuggest" class="flex flex-col justify-center items-center w-full h-full">
+        <NullStatePeople size="120" />
+        <span class="text-xl font-semibold text-mb-gray-2">Không có lời mời kết bạn nào</span>
       </div>
     </template>
   </FriendLayout>

@@ -21,7 +21,7 @@ onMounted(async () => {
       if (!user) {
         return router.push({ name: 'login' })
       }
-      if (userAuth.emailVerified !== user.verified !== true) {
+      if (userAuth.emailVerified && !user.verified) {
         await User.update({ authid: userAuth.uid, verified: userAuth.emailVerified })
       }
       const updated = await User.update({ authid: userAuth.uid, isOnline: true })
