@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 
 import CoverPhoto from '@/components/User/CoverPhoto.vue';
 import { Attachment, Friend } from '@/database';
-import {Logger} from '@/helpers/logger';
+import { Logger } from '@/helpers/logger';
 import { mewSocket } from '@/helpers/socket';
 import { useGeneral } from '@/stores/general';
 import { useUser } from '@/stores/user';
@@ -38,62 +38,77 @@ async function addFriend() {
   try {
     loading.add = true
     const event = await Friend.add(cuser.value!.id, user.value!.id)
-    mewSocket.emit(SEvent.FRIEND_REQUEST, event)
-    fuser.value!.requested = [...fuser.value!.requested, cuser.value!.id.toString()]
-    loading.add = false
-    is.requested = true
+    if (event) {
+      mewSocket.emit(SEvent.FRIEND_REQUEST, event)
+      fuser.value!.requested = [...fuser.value!.requested, cuser.value!.id.toString()]
+      is.requested = true
+    }
   } catch (error) {
     Logger.error(error)
+  } finally {
+    loading.add = false
   }
 }
 
-async function unfriend() { 
+async function unfriend() {
   try {
     loading.remove = true
     const event = await Friend.remove(cuser.value!.id, user.value!.id)
-    mewSocket.emit(SEvent.FRIEND_REMOVE, event)
-    fuser.value!.friends = fuser.value!.friends.filter(i => i !== cuser.value!.id.toString())
-    loading.remove = false
-    is.friend = false
+    if (event) {
+      mewSocket.emit(SEvent.FRIEND_REMOVE, event)
+      fuser.value!.friends = fuser.value!.friends.filter(i => i !== cuser.value!.id.toString())
+      is.friend = false
+    }
   } catch (error) {
     Logger.error(error)
+  } finally {
+    loading.remove = false
   }
 }
-async function cancelRequest() { 
+async function cancelRequest() {
   try {
     loading.cancel = true
     const event = await Friend.cancel(cuser.value!.id, user.value!.id)
-    mewSocket.emit(SEvent.FRIEND_CANCEL, event)
-    fuser.value!.received = fuser.value!.received.filter(i => i !== cuser.value!.id.toString())
-    loading.cancel = false
-    is.requested = false
+    if (event) {
+      mewSocket.emit(SEvent.FRIEND_CANCEL, event)
+      fuser.value!.received = fuser.value!.received.filter(i => i !== cuser.value!.id.toString())
+      is.requested = false
+    }
   } catch (error) {
     Logger.error(error)
+  } finally {
+    loading.cancel = false
   }
 }
-async function acceptRequest() { 
+async function acceptRequest() {
   try {
     loading.accept = true
     const event = await Friend.accept(cuser.value!.id, user.value!.id)
-    mewSocket.emit(SEvent.FRIEND_ACCEPT, event)
-    fuser.value!.friends = [...fuser.value!.friends, cuser.value!.id.toString()]
-    loading.accept = false
-    is.friend = true
-    is.received = false
+    if (event) {
+      mewSocket.emit(SEvent.FRIEND_ACCEPT, event)
+      fuser.value!.friends = [...fuser.value!.friends, cuser.value!.id.toString()]
+      is.friend = true
+      is.received = false
+    }
   } catch (error) {
     Logger.error(error)
+  } finally {
+    loading.accept = false
   }
 }
-async function rejectRequest() { 
+async function rejectRequest() {
   try {
     loading.reject = true
     const event = await Friend.reject(cuser.value!.id, user.value!.id)
-    mewSocket.emit(SEvent.FRIEND_REJECT, event)
-    fuser.value!.received = fuser.value!.received.filter(i => i !== cuser.value!.id.toString())
-    loading.reject = false
-    is.received = false
+    if (event) {
+      mewSocket.emit(SEvent.FRIEND_REJECT, event)
+      fuser.value!.received = fuser.value!.received.filter(i => i !== cuser.value!.id.toString())
+      is.received = false
+    }
   } catch (error) {
     Logger.error(error)
+  } finally {
+    loading.reject = false
   }
 }
 
@@ -104,7 +119,7 @@ const is = reactive({
 })
 
 const { cuser } = storeToRefs(useUser())
-const { isCropperModal } = storeToRefs(useGeneral())
+const { isCropperModal, notiCount } = storeToRefs(useGeneral())
 const id = +router.currentRoute.value.params.id
 
 onBeforeMount(async () => {
@@ -127,38 +142,43 @@ onBeforeMount(async () => {
     user.value!.coverURL = await Attachment.image(attachment.attachments.large)
   }
 
-  mewSocket.on(SEvent.NOTIFICATION_CREATE, (data: INotification) => {
+  mewSocket.on(SEvent.NOTIFICATION_CREATE, (data) => {
     if (data.aid === data.data.uid) return
     if (!fuser.value) return
     switch (data.type) {
       case NotificationType.FRIEND_RECEIVE:
-          is.received = true
-          fuser.value.received = [...fuser.value.received, cuser.value!.id.toString()]      
+        is.received = true
+        fuser.value.received = [...fuser.value.received, cuser.value!.id.toString()]
         break;
-    
+
       case NotificationType.FRIEND_ACCEPT:
-          is.friend = true
-          is.received = false
-          is.requested = false
-          fuser.value.friends = [...fuser.value.friends, cuser.value!.id.toString()]
-        break;
-      
-        case NotificationType.FRIEND_REMOVE:
-          is.friend = false
-          fuser.value.friends = fuser.value.friends.filter(i => i !== cuser.value!.id.toString())
+        is.friend = true
+        is.received = false
+        is.requested = false
+        fuser.value.friends = [...fuser.value.friends, cuser.value!.id.toString()]
         break;
 
-        case NotificationType.FRIEND_CANCEL:
-          is.received = false
-          fuser.value.received = fuser.value.received.filter(i => i !== cuser.value!.id.toString())
-          break;
+      case NotificationType.FRIEND_REMOVE:
+        is.friend = false
+        fuser.value.friends = fuser.value.friends.filter(i => i !== cuser.value!.id.toString())
+        break;
 
-        case NotificationType.FRIEND_REJECT:
-          is.requested = false
-          fuser.value.requested = fuser.value.requested.filter(i => i !== cuser.value!.id.toString())
-          break;
+      case NotificationType.FRIEND_REJECT:
+        is.requested = false
+        fuser.value.requested = fuser.value.requested.filter(i => i !== cuser.value!.id.toString())
+        break;
       default:
         break;
+    }
+  })
+  mewSocket.on(SEvent.NOTIFICATION_REMOVE, (data) => {
+    if (data.aid === data.data.uid) return
+    if (!fuser.value) return
+
+    if (data.type === NotificationType.FRIEND_RECEIVE) {
+      is.received = false
+      fuser.value.received = fuser.value.received.filter(i => i !== cuser.value!.id.toString())
+      notiCount.value--
     }
   })
 })
@@ -203,7 +223,7 @@ onBeforeMount(async () => {
           </div>
         </div>
 
-        <Button v-if="cuser.id === user.id" aria-label="Chỉnh sửa trang cá nhân" severity="secondary" 
+        <Button v-if="cuser.id === user.id" aria-label="Chỉnh sửa trang cá nhân" severity="secondary"
           class="space-x-2 bg-mb-gray hover:bg-mb-gray-h border-mb-gray" size="small">
           <i class="pi pi-pencil text-gray-700"></i>
           <span class="font-medium text-[16px] text-gray-700">Chỉnh sửa trang cá nhân</span>

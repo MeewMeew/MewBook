@@ -118,6 +118,24 @@ export type IAttachmentStore = {
   attachment: string
 }
 
+
+export enum FriendEventType {
+  FRIEND_REQUEST = 'friend_request',
+  FRIEND_ACCEPT = 'friend_accept',
+  FRIEND_REMOVE = 'friend_remove',
+  FRIEND_REJECT = 'friend_reject',
+  FRIEND_CANCEL = 'friend_cancel',
+}
+
+export type IFriendEvent = {
+  id: number,
+  aid: number,
+  uid: number,
+  fid: number,
+  type: FriendEventType,
+  created_at: number
+}
+
 export enum SEvent {
   SOCKET_CONNECT = 'connect',
   SOCKET_DISCONNECT = 'disconnect',
@@ -148,7 +166,6 @@ export enum SEvent {
   ATTACHMENT_UPLOAD = 'attachment:upload',
   ATTACHMENT_REMOVE = 'attachment:remove',
   ATTACHMENT_GET = 'attachment:get',
-  ATTACHMENT_CACHE = 'attachment:cache',
 }
 
 export interface StickerCollection {

@@ -7,6 +7,7 @@ import { uniqBy } from 'lodash';
 import { storeToRefs } from 'pinia';
 import Avatar from 'primevue/avatar';
 import Badge from 'primevue/badge';
+import Button from 'primevue/button';
 import Skeleton from 'primevue/skeleton';
 import InfiniteLoading from "v3-infinite-loading";
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
@@ -26,11 +27,11 @@ type EXINotification = INotification & {
   user: IUser
 }
 
-const { play } = useSound('/sound/noti.mp3', { volume: 0.5 })
+const { play } = useSound('/sound/noti.mp3', { volume: 0.1 })
 const { cuser } = storeToRefs(useUser())
 const { notiCount } = storeToRefs(useGeneral())
 
-const limit = 10
+const limit = 5
 const title = useTitle()
 const lastDocument = ref<number>(0)
 const notifications = ref<EXINotification[]>([])
@@ -44,6 +45,12 @@ const updateReadState = async (nid: string) => {
     notifications.value[index].read = true
     notiCount.value--
   }
+}
+
+const markAsReadAll = async () => {
+  await Notification.readAll(cuser.value!.id)
+  notifications.value.forEach(n => n.read = true)
+  notiCount.value = 0
 }
 
 const loadNotifications = async function ($state: any) {
@@ -70,8 +77,8 @@ const loadNotifications = async function ($state: any) {
 
     if ((data.length <= lastDocument.value && lastDocument.value !== 0) || data.length === 0) {
       $state.complete()
-      notiCount.value = notifications.value.filter(n => !n.read).length
     } else {
+      notiCount.value = notifications.value.filter(n => !n.read).length
       $state.loaded()
     }
     lastDocument.value = notifications.value.length
@@ -144,14 +151,12 @@ watch(notiCount, (newVal) => {
       enter-to-class="translate-y-0 opacity-100" leave-active-class="transition duration-150 ease-in"
       leave-from-class="translate-y-0 opacity-100" leave-to-class="translate-y-1 opacity-0">
       <PopoverPanel
-        class="absolute -left-28 z-10 mt-3 -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl border bg-white rounded-lg max-h-screen w-fit py-3 overflow-y-scroll nice-scrollbar">
+        class="absolute -left-28 z-10 mt-3 -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl border bg-white rounded-lg max-h-[80vh] w-fit py-3 overflow-y-scroll nice-scrollbar">
         <div class="px-3 flex flex-row justify-between items-center pb-2">
           <div class="text-xl font-bold ">
             <span class="">Thông báo</span>
           </div>
-          <div class="hover:bg-gray-200 rounded-full cursor-pointer w-8 h-8 relative">
-            <i class="pi pi-ellipsis-h p-1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-          </div>
+          <Button label="Read all" text :pt="{ label: 'text-sm' }" size="small" @click="markAsReadAll"/>
         </div>
         <div
           class="flex flex-col w-[350px] justify-center items-center animate__animated animate__fadeIn transition-all px-2">

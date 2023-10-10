@@ -55,23 +55,17 @@ const router = createRouter({
       }
     },
     {
-      path: '/user',
-      component: () => import('@/views/User.vue'),
+      path: '/user/:id',
+      name: 'user',
+      component: () => import('@/views/User/Base.vue'),
       meta: {
         requiresAuth: true,
       },
       children: [
         {
-          name: 'user',
-          path: ':id',
-          component: () => import('@/views/User.vue'),
-          children: [
-            {
-              name: 'fuser',
-              path: 'friends',
-              component: () => import('@/views/User.vue'),
-            }
-          ]
+          name: 'fuser',
+          path: 'friends',
+          component: () => import('@/views/User/Base.vue'),
         }
       ]
     },
@@ -89,12 +83,20 @@ const router = createRouter({
       component: () => import('@/views/Friend/Friends.vue'),
       meta: {
         requiresAuth: true,
+      }
+    },
+    {
+      path: '/friends/request',
+      name: 'frequest',
+      component: () => import('@/views/Friend/FriendRequest.vue'),
+      meta: {
+        requiresAuth: true,
       },
       children: [
         {
-          path: 'request',
-          name: 'friendrequest',
-          component: () => import('@/views/Friend/FriendRequest.vue'),
+          path: ':id',
+          name: 'frequest-view',
+          component: () => import('@/views/User/User.vue'),
         }
       ]
     },
@@ -117,7 +119,6 @@ const router = createRouter({
 export function initializeRouter() {
   router.beforeEach((to, _, next) => {
     onAuthStateChanged(auth, async (user) => {
-      await user?.reload()
       const userData = await User.get({ authid: user?.uid! })
       const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
       const requiresVerification = to.matched.some((record) => record.meta.requiresVerification)

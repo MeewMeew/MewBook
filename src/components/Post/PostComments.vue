@@ -6,6 +6,7 @@ import emojiData from "emoji-mart-vue-fast/data/twitter.json";
 // @ts-ignore
 import { EmojiIndex, Picker } from "emoji-mart-vue-fast/src";
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
+import { omit } from "lodash";
 import { storeToRefs } from 'pinia';
 import Avatar from 'primevue/avatar';
 import OverlayPanel from "primevue/overlaypanel";
@@ -89,8 +90,7 @@ const deleteComment = async (id: number) => {
   const comment = comments.value.find(cb)
   await Comment.delete(comment?.cid as string)
   comments.value.splice(comments.value.findIndex(cb), 1)
-
-  mewSocket.emit(SEvent.POST_COMMENT_REMOVE, comment)
+  mewSocket.emit(SEvent.POST_COMMENT_REMOVE, omit(comment, 'user'))
   commentSync.value[props.pid.toString()] = comments.value.length
 }
 

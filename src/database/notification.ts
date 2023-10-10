@@ -15,11 +15,12 @@ export class Notification {
   public static async read(nid: string) {
     await updateDoc(doc(db, 'notifications', nid), { read: true })
   }
-  public static async readAll(uid: string) {
+  public static async readAll(id: number) {
     const notiRef = collection(db, 'notifications')
-    const notiQuery = query(notiRef, where('uid', '==', uid))
+    const notiQuery = query(notiRef, where('aid', '==', id))
     const notiSnap = await getDocs(notiQuery)
     _.each(notiSnap.docs, async (d) => {
+      if (d.data().read) return
       await updateDoc(doc(db, 'notifications', d.id), { read: true })
     })
   }

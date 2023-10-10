@@ -76,7 +76,7 @@ export class Post {
       const _attachment = options.attachment ? orderBy('attachment') : null
       const _uid = options.uid ? where('uid', '==', options.uid) : null
       const _privacyMode = where('privacy', 'in', [...new Set([...options.privacyMode || [], Privacy.PUBLIC])])
-      const conditions = [_uid, _privacyMode, _attachment, _orderBy, _limit] as any[]
+      const conditions = [_uid, _privacyMode, _orderBy, _attachment, _limit] as any[]
       const queryWith = query(postRef, ...conditions.filter(e => e !== null))
 
       const postSnap = await getDocs(queryWith)

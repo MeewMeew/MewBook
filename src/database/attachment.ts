@@ -1,4 +1,3 @@
-
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
 
@@ -20,7 +19,8 @@ export class Attachment {
   }
 
   public static async get(realid: string) {
-    return (await getDoc(doc(db, 'attachments', realid))).data() as IAttachment
+    const data = (await getDoc(doc(db, 'attachments', realid))).data() as IAttachment
+    return data
   }
 
   public static isID(id: string) {
@@ -29,7 +29,7 @@ export class Attachment {
 
   public static async upload(attachment: File) {
     return new Promise<IAttachment>((resolve, reject) => {
-      mewSocket.emit(SEvent.ATTACHMENT_UPLOAD, attachment, async ({ error, attachments }: { error: unknown, attachments: IAttachmentItem }) => {
+      mewSocket.emit(SEvent.ATTACHMENT_UPLOAD, attachment, async ({ error, attachments }) => {
         if (error) return reject(error)
         Logger.info(`[${SEvent.ATTACHMENT_UPLOAD}] ${attachments.large}`)
         Attachment.create(attachments).then(resolve).catch(reject)
@@ -39,16 +39,10 @@ export class Attachment {
 
   public static async image(id: string) {
     return new Promise<string>((resolve, reject) => {
-      mewSocket.emit(SEvent.ATTACHMENT_CACHE, id, async ({ cache, error }: { error: unknown, cache: boolean }) => {
+      mewSocket.emit(SEvent.ATTACHMENT_GET, id, async (error) => {
         if (error) return reject(error)
-        if (cache) return resolve(`${import.meta.env.VITE_API_URL}/a/${id}`)
-        else {
-          mewSocket.emit(SEvent.ATTACHMENT_GET, id, async ({ attachment, error: err }: { error: unknown, attachment: string }) => {
-            if (err) return reject(err)
-            Logger.info(`[${SEvent.ATTACHMENT_GET}] ${id}`)
-            return resolve(attachment)
-          })
-        }
+        Logger.info(`[${SEvent.ATTACHMENT_GET}] ${id}`)
+        return resolve(`${import.meta.env.VITE_API_URL}/a/${id}`)
       })
     })
   }

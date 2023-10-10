@@ -38,17 +38,17 @@ onMounted(async () => {
   topReactions.value = Reaction.top(reactions.value)
   creaction.value = reactions.value.find(r => r.uid === cuser.value?.id)?.type || null
 
-  mewSocket.on(SEvent.NOTIFICATION_UPDATE, async (_nid: string, data: any, type: NotificationType) => {
-    if (type === NotificationType.POST_REACTION) {
+  mewSocket.on(SEvent.NOTIFICATION_UPDATE, async (data) => {
+    if (data.type === NotificationType.POST_REACTION) {
       const index = reactions.value.findIndex(r => r.id === data.id)
       if (index === -1) return
-      reactions.value[index].type = data.type
+      reactions.value[index].type = data.data.type
       topReactions.value = Reaction.top(reactions.value)
     }
   })
 
-  mewSocket.on(SEvent.NOTIFICATION_REMOVE, async (_nid: string, data: any, type: NotificationType) => {
-    if (type === NotificationType.POST_REACTION) {
+  mewSocket.on(SEvent.NOTIFICATION_REMOVE, async (data) => {
+    if (data.type === NotificationType.POST_REACTION) {
       const index = reactions.value.findIndex(r => r.id === data.id)
       if (index === -1) return
       reactions.value.splice(index, 1)

@@ -4,7 +4,7 @@ import { uniqBy } from 'lodash'
 import { storeToRefs } from 'pinia';
 import Skeleton from 'primevue/skeleton';
 import InfiniteLoading from "v3-infinite-loading";
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { toast } from 'vue3-toastify';
 
 import PostVue from '@/components/Post/Post.vue'
@@ -31,9 +31,10 @@ const { posts } = storeToRefs(usePost())
 const lastDoc = ref<number>(0)
 const privacyMode = ref<any[]>([Privacy.PUBLIC])
 
-onMounted(() => {
+onBeforeMount(() => {
   lastDoc.value = 0
   posts.value = []
+
 })
 
 const load = async ($state: any) => {

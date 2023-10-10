@@ -3,7 +3,7 @@ import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase
 import { v4 as uuidv4 } from 'uuid'
 
 import { db } from '@/shared/firebase'
-import { type IFriend,NotificationType } from '@/types'
+import { FriendEventType, type IFriend, type IFriendEvent } from '@/types'
 
 export class Friend {
   public static async create(uid: number) {
@@ -35,7 +35,7 @@ export class Friend {
     return friend
   }
 
-  public static async add(uid: number, fid: number) {
+  public static async add(uid: number, fid: number): Promise<IFriendEvent | null> {
     const cuser = await this.getByUID(uid)
     const user = await this.getByUID(fid)
 
@@ -51,12 +51,12 @@ export class Friend {
       uid: cuser.uid,
       aid: cuser.uid,
       fid: user.uid,
-      type: NotificationType.FRIEND_REQUEST,
+      type: FriendEventType.FRIEND_REQUEST,
       created_at: Date.now()
     }
   }
 
-  public static async remove(uid: number, fid: number) {
+  public static async remove(uid: number, fid: number): Promise<IFriendEvent | null> {
     const cuser = await this.getByUID(uid)
     const user = await this.getByUID(fid)
 
@@ -72,12 +72,12 @@ export class Friend {
       uid: cuser.uid,
       aid: cuser.uid,
       fid: user.uid,
-      type: NotificationType.FRIEND_REMOVE,
+      type: FriendEventType.FRIEND_REMOVE,
       created_at: Date.now()
     }
   }
 
-  public static async accept(uid: number, fid: number) {
+  public static async accept(uid: number, fid: number): Promise<IFriendEvent | null> {
     const cuser = await this.getByUID(uid)
     const user = await this.getByUID(fid)
 
@@ -96,12 +96,12 @@ export class Friend {
       uid: cuser.uid,
       aid: cuser.uid,
       fid: user.uid,
-      type: NotificationType.FRIEND_ACCEPT,
+      type: FriendEventType.FRIEND_ACCEPT,
       created_at: Date.now()
     }
   }
 
-  public static async reject(uid: number, fid: number) {
+  public static async reject(uid: number, fid: number): Promise<IFriendEvent | null> {
     const cuser = await this.getByUID(uid)
     const user = await this.getByUID(fid)
 
@@ -117,12 +117,12 @@ export class Friend {
       uid: cuser.uid,
       aid: cuser.uid,
       fid: user.uid,
-      type: NotificationType.FRIEND_REJECT,
+      type: FriendEventType.FRIEND_REJECT,
       created_at: Date.now()
     }
   }
 
-  public static async cancel(uid: number, fid: number) {
+  public static async cancel(uid: number, fid: number): Promise<IFriendEvent | null> {
     const cuser = await this.getByUID(uid)
     const user = await this.getByUID(fid)
 
@@ -138,7 +138,7 @@ export class Friend {
       uid: cuser.uid,
       aid: cuser.uid,
       fid: user.uid,
-      type: NotificationType.FRIEND_CANCEL,
+      type: FriendEventType.FRIEND_CANCEL,
       created_at: Date.now()
     }
   }

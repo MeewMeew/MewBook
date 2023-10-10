@@ -1,6 +1,6 @@
 {
   "name": "facebook-clone",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "scripts": {
     "build": "run-p type-check build-only",

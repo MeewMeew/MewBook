@@ -1,10 +1,12 @@
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 
-import { apiURL } from "@/shared/config";
+import { apiURL } from '@/shared/config';
+import { type SocketClient } from "@/types/socket";
 
-import { Logger } from "./logger";
+import { Logger } from './logger';
 
-export const mewSocket = io(`${apiURL}/mewbook`, { transports: ['polling'] })
+
+export const mewSocket: SocketClient = io(`${apiURL}/mewbook`)
 
 mewSocket.on('connect', () => {
   Logger.log('Socket', 'Connected to socket server')

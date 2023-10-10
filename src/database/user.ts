@@ -57,6 +57,19 @@ export class User {
     }
   }
 
+  public static async getAll() {
+    try {
+      const userRef = collection(db, 'users')
+      const userQuery = query(userRef)
+      const userSnap = await getDocs(userQuery)
+      const users = userSnap.docs.map(e => e.data()) as IUser[]
+      return users
+    } catch (error) {
+      Logger.error('Get all user error', error)
+      return []
+    }
+  }
+
   public static async create(options: CreateUserOptions) {
     const userData: IUser = {
       id: Date.now(),
