@@ -12,7 +12,7 @@ import { Logger } from '@/helpers/logger';
 import { mewSocket } from '@/helpers/socket';
 import { useGeneral } from '@/stores/general';
 import { useUser } from '@/stores/user';
-import { type IFriend, type INotification, type IUser, NotificationType, SEvent } from '@/types';
+import { type IFriend, type IUser, NotificationType, SEvent } from '@/types';
 
 const router = useRouter()
 const props = defineProps({
