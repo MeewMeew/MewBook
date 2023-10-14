@@ -192,7 +192,7 @@ onBeforeMount(async () => {
 </script>
 <template>
   <div class="w-full bg-white" v-if="cuser && user">
-    <div class="max-w-[1100px] mx-auto pb-1">
+    <div class="max-w-xl mx-auto pb-1">
       <CoverPhoto :cover="user.coverURL" :uid="user.id" />
 
       <div class="flex md:flex-row flex-col items-center justify-between px-4 pb-4 md:pb-0">

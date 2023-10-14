@@ -32,7 +32,7 @@ onAuthStateChanged(auth, async (userAuth) => {
 </script>
 <template>
   <NonVerifyLayout>
-    <Card class="w-screen mix-w-sm max-w-2xl h-1/3 bg-white drop-shadow-lg rounded-lg">
+    <Card class="w-screen mix-w-sm max-w-md h-1/3 bg-white drop-shadow-lg rounded-lg">
       <template #title>
         <div class="text-2xl font-medium text-gray-700">
           <span>Đang chờ xác thực email</span>
@@ -44,8 +44,6 @@ onAuthStateChanged(auth, async (userAuth) => {
           <p>Chúng tôi đã gửi một email xác nhận đến hộp thư của bạn.</p>
           <p>Vui lòng nhấn vào liên kết được gửi để tiến hành xác minh tài khoản.</p>
         </div>
-      </template>
-      <template #footer>
         <div class="text-gray-500 text-center">
           <span>&copy; 2023 Mewbook</span>
         </div>

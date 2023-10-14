@@ -165,7 +165,7 @@ onUpdated(() => {
       leave-to-class="translate-y-1 opacity-0"
     >
       <PopoverPanel
-        class="absolute -left-28 z-10 mt-3 -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl border bg-white rounded-lg max-h-[80vh] w-fit py-3 overflow-y-scroll nice-scrollbar"
+        class="absolute -left-28 z-10 mt-3 -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-xl border bg-white rounded-lg max-h-[80vh] w-fit py-3 overflow-y-scroll nice-scrollbar"
       >
         <div class="px-3 flex flex-row justify-between items-center pb-2">
           <div class="text-xl font-bold">

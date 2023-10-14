@@ -54,7 +54,7 @@ onMounted(async () => {
     <UserHeader v-if="user" :user="user" :tab="($route.name as string)" />
 
     <div
-      class="flex-cols md:flex w-full max-w-[1100px] justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto"
+      class="flex-cols md:flex w-full max-w-xl justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto"
       v-if="user"
     >
       <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'" />

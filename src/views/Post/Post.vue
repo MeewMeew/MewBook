@@ -39,7 +39,7 @@ const deletePost = async (id: string) => {
     <div class="w-full min-h-screen bg-[#F1F2F5] flex justify-center min-w-[450px]">
       <PostVue
         :post="post"
-        class="xl:w-3/5 max-w-2xl min-w-sm"
+        class="xl:w-3/5 max-w-lg min-w-sm"
         :scrollable="false"
         :display-comment-box="true"
         @delete-post="deletePost"

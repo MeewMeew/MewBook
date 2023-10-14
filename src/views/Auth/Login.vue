@@ -60,7 +60,7 @@ async function submit() {
 
 <template>
   <GuestLayout>
-    <div class="max-w-4xl w-full flex flex-col lg:flex-row justify-around items-center">
+    <div class="max-w-lg w-full flex flex-col lg:flex-row justify-around items-center">
       <div
         class="text-left flex flex-col lg:-mt-10 mb-10 items-center justify-center lg:items-start"
       >
