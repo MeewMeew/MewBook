@@ -11,6 +11,5 @@ import MainNavLayout from '@/layouts/MainNavLayout.vue'
         <slot name="view"></slot>
       </div>
     </div>
-
   </MainNavLayout>
 </template>

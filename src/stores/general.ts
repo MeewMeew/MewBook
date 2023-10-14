@@ -8,15 +8,15 @@ export const useGeneral = defineStore('general', {
       isImageDisplay: null,
       loadingOnLogin: false,
       conversationColor: '#0084ff',
-      notiCount: 0,
+      notiCount: 0
     } as {
       isPostOverlay: boolean
       isCropperModal: boolean
       isConversationSidebarOpen: boolean
       isImageDisplay: string | null
       loadingOnLogin: boolean
-      conversationColor: string,
-      notiCount: number,
+      conversationColor: string
+      notiCount: number
     }),
   persist: true
 })

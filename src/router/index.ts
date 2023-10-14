@@ -23,7 +23,7 @@ const router = createRouter({
       name: 'logout',
       component: () => import('@/views/Auth/Logout.vue'),
       meta: {
-        requiresAuth: true,
+        requiresAuth: true
       }
     },
     {
@@ -59,13 +59,13 @@ const router = createRouter({
       name: 'user',
       component: () => import('@/views/User/Base.vue'),
       meta: {
-        requiresAuth: true,
+        requiresAuth: true
       },
       children: [
         {
           name: 'fuser',
           path: 'friends',
-          component: () => import('@/views/User/Friend.vue'),
+          component: () => import('@/views/User/Friend.vue')
         }
       ]
     },
@@ -74,7 +74,7 @@ const router = createRouter({
       name: 'post',
       component: () => import('@/views/Post/Post.vue'),
       meta: {
-        requiresAuth: true,
+        requiresAuth: true
       }
     },
     {
@@ -82,7 +82,7 @@ const router = createRouter({
       name: 'friends',
       component: () => import('@/views/Friend/Friends.vue'),
       meta: {
-        requiresAuth: true,
+        requiresAuth: true
       }
     },
     {
@@ -90,13 +90,33 @@ const router = createRouter({
       name: 'frequest',
       component: () => import('@/views/Friend/FriendRequest.vue'),
       meta: {
-        requiresAuth: true,
+        requiresAuth: true
       },
       children: [
         {
           path: ':id',
           name: 'frequest-view',
-          component: () => import('@/views/User/User.vue'),
+          component: () => import('@/views/User/User.vue')
+        }
+      ]
+    },
+    {
+      path: '/messenger',
+      name: 'messenger',
+      component: () => import('@/views/Messenger/Messenger.vue'),
+      meta: {
+        requiresAuth: true
+      },
+      children: [
+        {
+          path: 't',
+          name: 'thread',
+          component: () => import('@/views/Messenger/Messenger.vue')
+        },
+        {
+          path: 't/:id',
+          name: 'conversation',
+          component: () => import('@/views/Messenger/Conversation.vue')
         }
       ]
     },
@@ -105,7 +125,7 @@ const router = createRouter({
       name: 'bookmarks',
       component: () => import('@/views/BookmarksMobile.vue'),
       meta: {
-        requiresAuth: true,
+        requiresAuth: true
       }
     },
     {

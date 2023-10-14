@@ -10,7 +10,7 @@ type ButtonStyle =
   | 'info'
   | 'light'
   | 'dark'
-  | 'link';
+  | 'link'
 
 const props = defineProps({
   type: {
@@ -47,7 +47,7 @@ const styleClasses = {
 <template>
   <button
     :type="props.type"
-    :class="[styleClasses[props.bstyle], props.width, props.height]" 
+    :class="[styleClasses[props.bstyle], props.width, props.height]"
     class="btn-login text-white font-bold rounded-lg focus:outline-none focus:ring text-xl"
   >
     <slot></slot>

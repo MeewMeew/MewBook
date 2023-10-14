@@ -14,18 +14,17 @@ const { cuser } = storeToRefs(useUser())
 const router = useRouter()
 const userId = +router.currentRoute.value.params.id
 const user = ref<IUser>()
-const images = ref<{id: number, image: string}[]>([])
+const images = ref<{ id: number; image: string }[]>([])
 const is = reactive({
   friend: false,
   self: false
 })
 
 onMounted(async () => {
-  if (cuser.value?.id === userId){
+  if (cuser.value?.id === userId) {
     user.value = cuser.value
     is.self = true
-  }
-  else {
+  } else {
     const userDb = await User.get({ id: userId })
     if (userDb) user.value = userDb
     else return router.push({ name: 'dashboard' })
@@ -43,7 +42,7 @@ onMounted(async () => {
   for (const post of posts) {
     if (post.attachment) {
       const medium = await Attachment.image((post.attachment as IAttachmentItem).large)
-      if (images.value.length === 9) break;
+      if (images.value.length === 9) break
       else images.value.push({ id: post.id, image: medium })
     }
   }
@@ -52,11 +51,14 @@ onMounted(async () => {
 
 <template>
   <div class="w-full min-h-[100vh] pb-20 bg-[#F1F2F5] min-w-sm" v-if="cuser">
-    <UserHeader v-if="user" :user="user" :tab="($route.name as string)"/>
+    <UserHeader v-if="user" :user="user" :tab="($route.name as string)" />
 
-    <div class="flex-cols md:flex w-full max-w-[1100px] justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto" v-if="user">
-      <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'"/>
-      <UserProfile :user="user" v-else/>
+    <div
+      class="flex-cols md:flex w-full max-w-[1100px] justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto"
+      v-if="user"
+    >
+      <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'" />
+      <UserProfile :user="user" v-else />
     </div>
   </div>
 </template>

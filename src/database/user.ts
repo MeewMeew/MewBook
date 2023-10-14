@@ -1,11 +1,20 @@
-import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Logger } from "@/helpers/logger";
-import { db } from "@/shared/firebase"
-import type { Gender, IUser } from "@/types"
+import { Logger } from '@/helpers/logger'
+import { db } from '@/shared/firebase'
+import type { Gender, IUser } from '@/types'
 
-type PartialWithRequired<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>;
+type PartialWithRequired<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>
 
 interface GetUserOptions {
   id?: number
@@ -14,7 +23,7 @@ interface GetUserOptions {
 }
 
 interface SetAvatarOptions {
-  uid: number,
+  uid: number
   attachment: string
 }
 
@@ -27,14 +36,21 @@ interface CreateUserOptions {
 }
 
 export class User {
-  public static async get(options: PartialWithRequired<GetUserOptions, 'id'> | PartialWithRequired<GetUserOptions, 'uid'> | PartialWithRequired<GetUserOptions, 'authid'>) {
+  public static async get(
+    options:
+      | PartialWithRequired<GetUserOptions, 'id'>
+      | PartialWithRequired<GetUserOptions, 'uid'>
+      | PartialWithRequired<GetUserOptions, 'authid'>
+  ) {
     try {
       if (!options.id && !options.uid && !options.authid) {
         return null
       }
       if (options.id || options.authid) {
         const userRef = collection(db, 'users')
-        const condition = options.id ? where('id', '==', options.id) : where('authid', '==', options.authid)
+        const condition = options.id
+          ? where('id', '==', options.id)
+          : where('authid', '==', options.authid)
         const userQuery = query(userRef, condition)
         const userSnap = await getDocs(userQuery)
         const firstUserDoc = userSnap.docs[0]
@@ -62,7 +78,7 @@ export class User {
       const userRef = collection(db, 'users')
       const userQuery = query(userRef)
       const userSnap = await getDocs(userQuery)
-      const users = userSnap.docs.map(e => e.data()) as IUser[]
+      const users = userSnap.docs.map((e) => e.data()) as IUser[]
       return users
     } catch (error) {
       Logger.error('Get all user error', error)
@@ -71,9 +87,10 @@ export class User {
   }
 
   public static async create(options: CreateUserOptions) {
+    const userRef = doc(db, 'users', uuidv4())
     const userData: IUser = {
       id: Date.now(),
-      uid: uuidv4(),
+      uid: userRef.id,
       authid: options.authid,
       displayName: options.displayName,
       email: options.email,
@@ -86,7 +103,7 @@ export class User {
     }
 
     try {
-      await setDoc(doc(db, 'users', userData.uid), userData)
+      await setDoc(userRef, userData)
       return userData
     } catch (error) {
       Logger.error('Create user error', error)

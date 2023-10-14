@@ -1,18 +1,17 @@
 import MarkdownIt from 'markdown-it'
 import emoji from 'markdown-it-emoji'
 
-import {markdownitTagToClass} from '@/helpers/mde'
+import { markdownitTagToClass } from '@/helpers/mde'
 const md = new MarkdownIt({
   html: true,
   linkify: true,
   typographer: true,
   breaks: true,
-  xhtmlOut: true,
+  xhtmlOut: true
 })
 
 md.use(markdownitTagToClass, {
-  a: ['decoration-1', 'text-mb-blue'],
-  
+  a: ['decoration-1', 'text-mb-blue']
 })
 
 md.use(emoji)
@@ -29,5 +28,3 @@ export function formatContentContainURL(content: string) {
 export function formatContent(content: string) {
   return md.render(content)
 }
-
-  

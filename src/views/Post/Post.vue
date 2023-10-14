@@ -23,8 +23,7 @@ onMounted(async () => {
       postDb.attachment = attachment.attachments
     }
     post.value = postDb
-  }
-  else return router.push({ name: 'dashboard' })
+  } else return router.push({ name: 'dashboard' })
 })
 
 const deletePost = async (id: string) => {
@@ -33,14 +32,18 @@ const deletePost = async (id: string) => {
   toast.success('Đã xoá bài viết thành công.')
   router.push({ name: 'dashboard' })
 }
-
 </script>
 
 <template>
   <MainNavLayout select="none" v-if="post">
     <div class="w-full min-h-screen bg-[#F1F2F5] flex justify-center min-w-[450px]">
-      <PostVue :post="post" class="xl:w-3/5 max-w-2xl min-w-sm" :scrollable="false" :display-comment-box="true"
-        @delete-post="deletePost" />
+      <PostVue
+        :post="post"
+        class="xl:w-3/5 max-w-2xl min-w-sm"
+        :scrollable="false"
+        :display-comment-box="true"
+        @delete-post="deletePost"
+      />
     </div>
   </MainNavLayout>
 </template>

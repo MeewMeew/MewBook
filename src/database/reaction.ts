@@ -1,16 +1,15 @@
-
 import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import _ from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 import { mewSocket } from '@/helpers/socket'
 import { db } from '@/shared/firebase'
-import { type IReaction, type IUser, type ReactionType,SEvent } from '@/types'
+import { type IReaction, type IUser, type ReactionType, SEvent } from '@/types'
 
 interface UpdateReactionOptions {
   pid: number
   aid: number
-  type: ReactionType,
+  type: ReactionType
   reactions: IReaction[]
   user: IUser
   default?: boolean
@@ -37,12 +36,16 @@ export class Reaction {
 
       if (options.default) {
         await deleteDoc(doc(db, 'reactions', reaction.rid))
-        options.reactions = _.filter(options.reactions, (reaction) => reaction.rid !== reactionData.rid)
+        options.reactions = _.filter(
+          options.reactions,
+          (reaction) => reaction.rid !== reactionData.rid
+        )
         mewSocket.emit(SEvent.POST_REACTION_REMOVE, reactionData)
-        
       } else {
         await setDoc(doc(db, 'reactions', reaction.rid), reactionData)
-        options.reactions = _.map(options.reactions, (reaction) => reaction.rid === reactionData.rid ? reactionData : reaction)
+        options.reactions = _.map(options.reactions, (reaction) =>
+          reaction.rid === reactionData.rid ? reactionData : reaction
+        )
         mewSocket.emit(SEvent.POST_REACTION_UPDATE, reactionData)
       }
     } else {
@@ -63,7 +66,7 @@ export class Reaction {
     const reactionsQuery = query(reactionsRef, where('pid', '==', pid))
     const reactionsSnap = await getDocs(reactionsQuery)
     const reactions: IReaction[] = []
-    reactionsSnap.docs.forEach(reaction => reactions.push(reaction.data() as IReaction))
+    reactionsSnap.docs.forEach((reaction) => reactions.push(reaction.data() as IReaction))
     return reactions
   }
 
@@ -72,11 +75,21 @@ export class Reaction {
     const reactionsQuery = query(reactionsRef, where('pid', '==', pid), where('uid', '==', uid))
     const reactionsSnap = await getDocs(reactionsQuery)
     const reactions: IReaction[] = []
-    reactionsSnap.docs.forEach(reaction => reactions.push(reaction.data() as IReaction))
+    reactionsSnap.docs.forEach((reaction) => reactions.push(reaction.data() as IReaction))
     return reactions[0]
   }
 
   public static top(reactions: IReaction[], top: number = 3) {
-    return _.map(_.take(_.orderBy(_.map(_.countBy(reactions, 'type'), (count, type) => ({ type, count })), 'count', 'desc'), top), (value) => value.type) as ReactionType[]
+    return _.map(
+      _.take(
+        _.orderBy(
+          _.map(_.countBy(reactions, 'type'), (count, type) => ({ type, count })),
+          'count',
+          'desc'
+        ),
+        top
+      ),
+      (value) => value.type
+    ) as ReactionType[]
   }
 }

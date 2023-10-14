@@ -1,4 +1,3 @@
-
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -7,9 +6,10 @@ import { FriendEventType, type IFriend, type IFriendEvent } from '@/types'
 
 export class Friend {
   public static async create(uid: number) {
+    const friendRef = doc(db, 'friends', uuidv4())
     const friendData: IFriend = {
       id: Date.now(),
-      fid: uuidv4(),
+      fid: friendRef.id,
       uid: uid,
       friends: [],
       received: [],
@@ -17,7 +17,7 @@ export class Friend {
       created_at: Date.now()
     }
 
-    await setDoc(doc(db, 'friends', friendData.fid), friendData)
+    await setDoc(friendRef, friendData)
     return friendData
   }
 
@@ -149,6 +149,8 @@ export class Friend {
 
     if (!cuser || !user) return false
 
-    return cuser.friends.includes(user.uid.toString()) && user.friends.includes(cuser.uid.toString())
+    return (
+      cuser.friends.includes(user.uid.toString()) && user.friends.includes(cuser.uid.toString())
+    )
   }
 }

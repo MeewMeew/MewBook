@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { onAuthStateChanged } from 'firebase/auth';
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { onAuthStateChanged } from 'firebase/auth'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-import { Attachment } from '@/database';
-import { User } from '@/database/user';
-import { mewSocket } from '@/helpers/socket';
+import { Attachment } from '@/database'
+import { User } from '@/database/user'
+import { mewSocket } from '@/helpers/socket'
 import { auth } from '@/shared/firebase'
 import { useUser } from '@/stores/user'
-import { SEvent } from '@/types';
+import { SEvent } from '@/types'
 
 const { cuser, setUser } = useUser()
 const router = useRouter()
 
 onMounted(async () => {
-  if (router.currentRoute.value.name === 'logout') return;
+  if (router.currentRoute.value.name === 'logout') return
   onAuthStateChanged(auth, async (userAuth) => {
     if (userAuth) {
-      const user = (await User.get({ authid: userAuth.uid }))
+      const user = await User.get({ authid: userAuth.uid })
       if (!user) {
         return router.push({ name: 'login' })
       }
@@ -44,9 +44,8 @@ onMounted(async () => {
 
   if (!cuser) return router.push({ name: 'login' })
 })
-
 </script>
 
 <template>
-  <router-view :key="$route.path" />
+  <router-view :key="$route.name!" />
 </template>

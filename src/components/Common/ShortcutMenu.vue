@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
-import { useUser } from '@/stores/user';
+import { useUser } from '@/stores/user'
 
 const { cuser } = storeToRefs(useUser())
 const expanded = ref(false)
@@ -18,21 +18,21 @@ const items = ref([
     label: 'Tìm bạn bè',
     to: { name: 'friends' },
     bgImage: true,
-    bgPosition: '0 -296px',
+    bgPosition: '0 -296px'
   },
   {
     icon: 'list-icon.png',
     label: 'Đã lưu',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0 -185px',
+    bgPosition: '0 -185px'
   },
   {
     icon: 'list-icon.png',
     label: 'Nhóm của bạn',
     to: { name: 'dashboard' },
     bgImage: true,
-    bgPosition: '0 -37px',
+    bgPosition: '0 -37px'
   },
   {
     icon: 'list-icon.png',
@@ -40,7 +40,7 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 -407px',
-    hide: true,
+    hide: true
   },
   {
     icon: 'list-icon.png',
@@ -48,14 +48,14 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 -74px',
-    hide: true,
+    hide: true
   },
   {
     icon: 'credit-card.png',
     label: 'Đơn hàng và thanh toán',
     to: { name: 'dashboard' },
     bgImage: false,
-    hide: true,
+    hide: true
   },
   {
     icon: 'list-icon.png',
@@ -63,7 +63,7 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 -444px',
-    hide: true,
+    hide: true
   },
   {
     icon: 'messenger.png',
@@ -71,7 +71,7 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 0px',
-    hide: true,
+    hide: true
   },
   {
     icon: 'event.png',
@@ -79,7 +79,7 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 0px',
-    hide: true,
+    hide: true
   },
   {
     icon: 'list-icon.png',
@@ -87,7 +87,7 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 -111px',
-    hide: true,
+    hide: true
   },
   {
     icon: 'video-game.png',
@@ -95,7 +95,7 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 0px',
-    hide: true,
+    hide: true
   },
   {
     icon: 'list-icon.png',
@@ -103,39 +103,69 @@ const items = ref([
     to: { name: 'dashboard' },
     bgImage: true,
     bgPosition: '0 -518px',
-    hide: true,
-  },
+    hide: true
+  }
 ])
-
-
 </script>
 <template>
   <div>
     <div class="py-4 flex flex-col gap-2" v-if="cuser">
-      <div class="h-full p-2 flex flex-col gap-4 w-full ">
+      <div class="h-full p-2 flex flex-col gap-4 w-full">
         <div class="h-[85vh]">
-          <div class="animate__animated animate__fadeIn transition-all flex flex-col w-full 2xl:w-6/7">
+          <div
+            class="animate__animated animate__fadeIn transition-all flex flex-col w-full 2xl:w-6/7"
+          >
             <div class="w-full mb-0.5 mt-2">
-              <router-link :to="{ name: 'user', params: { id: cuser.id } }"
-                class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300">
-                <img :src="cuser.photoURL" :alt="cuser.displayName" class="max-w-[36px] max-h-[36px] avatar" />
-                <span class="font-sans font-medium text-sm text-[#050505]">{{ cuser.displayName }}</span>
+              <router-link
+                :to="{ name: 'user', params: { id: cuser.id } }"
+                class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300"
+              >
+                <img
+                  :src="cuser.photoURL"
+                  :alt="cuser.displayName"
+                  class="max-w-[36px] max-h-[36px] avatar"
+                />
+                <span class="font-sans font-medium text-md text-[#050505]">{{
+                  cuser.displayName
+                }}</span>
               </router-link>
             </div>
 
-            <div class="w-full mb-0.5" v-for="(item, index) in items" :key="index"
-              v-show="item.hide ? item.hide && expanded : true">
-              <router-link :to="item.to"
-                class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300">
-                <img v-if="!item.bgImage" :src="`/icons/${item.icon}`" class="w-[36px] h-[36px] inline-block" />
-                <i v-else :style="{ backgroundImage: `url(/icons/${item.icon})`, backgroundPosition: item.bgPosition }"
-                  class="w-[36px] h-[36px] inline-block bg-no-repeat bg-auto" />
+            <div
+              class="w-full mb-0.5"
+              v-for="(item, index) in items"
+              :key="index"
+              v-show="item.hide ? item.hide && expanded : true"
+            >
+              <router-link
+                :to="item.to"
+                class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300"
+              >
+                <img
+                  v-if="!item.bgImage"
+                  :src="`/icons/${item.icon}`"
+                  class="w-[36px] h-[36px] inline-block"
+                />
+                <i
+                  v-else
+                  :style="{
+                    backgroundImage: `url(/icons/${item.icon})`,
+                    backgroundPosition: item.bgPosition
+                  }"
+                  class="w-[36px] h-[36px] inline-block bg-no-repeat bg-auto"
+                />
                 <span class="font-sans font-medium text-sm text-[#050505]">{{ item.label }}</span>
               </router-link>
             </div>
 
-            <div class="w-full mb-0.5 cursor-pointer" v-if="!expanded" @click="expanded = !expanded">
-              <div class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300">
+            <div
+              class="w-full mb-0.5 cursor-pointer"
+              v-if="!expanded"
+              @click="expanded = !expanded"
+            >
+              <div
+                class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300"
+              >
                 <div class="bg-zinc-200 flex h-[36px] w-[36px] rounded-full">
                   <i class="pi pi-chevron-down text-lg m-auto" />
                 </div>
@@ -143,7 +173,9 @@ const items = ref([
               </div>
             </div>
             <div class="w-full mb-0.5 cursor-pointer" v-else @click="expanded = !expanded">
-              <div class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300">
+              <div
+                class="px-2 py-1 rounded-lg flex items-center gap-3 hover:bg-zinc-200 duration-300"
+              >
                 <div class="bg-zinc-200 flex h-[36px] w-[36px] rounded-full">
                   <i class="pi pi-chevron-up text-lg m-auto" />
                 </div>

@@ -1,26 +1,37 @@
 /* eslint-disable no-async-promise-executor */
-import { collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, setDoc, where } from "firebase/firestore"
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  setDoc,
+  where
+} from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Attachment, User } from "@/database";
-import { Logger } from "@/helpers/logger";
-import { db } from "@/shared/firebase"
-import { Gender, type IPost, Privacy } from "@/types"
+import { Attachment, User } from '@/database'
+import { Logger } from '@/helpers/logger'
+import { db } from '@/shared/firebase'
+import { Gender, type IPost, Privacy } from '@/types'
 
-type PartialWithRequired<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>;
+type PartialWithRequired<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>
 
 interface GetPostOptions {
-  id: number;
-  pid: string;
+  id: number
+  pid: string
 }
 
 interface GetAllPostOptions {
-  limit: number;
-  uid?: number;
-  order: 'asc' | 'desc';
-  sort: 'id' | 'created_at';
-  attachment?: boolean;
-  privacyMode?: Privacy[];
+  limit: number
+  uid?: number
+  order: 'asc' | 'desc'
+  sort: 'id' | 'created_at'
+  attachment?: boolean
+  privacyMode?: Privacy[]
 }
 
 interface CreatePostOptions {
@@ -35,7 +46,9 @@ interface CreatePostOptions {
 }
 
 export class Post {
-  public static async get(options: PartialWithRequired<GetPostOptions, 'pid'> | PartialWithRequired<GetPostOptions, 'id'>) {
+  public static async get(
+    options: PartialWithRequired<GetPostOptions, 'pid'> | PartialWithRequired<GetPostOptions, 'id'>
+  ) {
     try {
       if (!options.pid && !options.id) {
         return null
@@ -75,12 +88,14 @@ export class Post {
       const _orderBy = orderBy(options.sort, options.order)
       const _attachment = options.attachment ? orderBy('attachment') : null
       const _uid = options.uid ? where('uid', '==', options.uid) : null
-      const _privacyMode = where('privacy', 'in', [...new Set([...options.privacyMode || [], Privacy.PUBLIC])])
+      const _privacyMode = where('privacy', 'in', [
+        ...new Set([...(options.privacyMode || []), Privacy.PUBLIC])
+      ])
       const conditions = [_uid, _privacyMode, _orderBy, _attachment, _limit] as any[]
-      const queryWith = query(postRef, ...conditions.filter(e => e !== null))
+      const queryWith = query(postRef, ...conditions.filter((e) => e !== null))
 
       const postSnap = await getDocs(queryWith)
-      const posts = postSnap.docs.map(e => e.data()) as IPost[]
+      const posts = postSnap.docs.map((e) => e.data()) as IPost[]
       for (const post of posts) {
         if (Attachment.isID(post.attachment as string)) {
           const a = await Attachment.get(post.attachment as string)
@@ -96,9 +111,10 @@ export class Post {
 
   public static create(options: CreatePostOptions) {
     return new Promise<IPost>(async (resolve, reject) => {
+      const postRef = doc(db, 'posts', uuidv4())
       const post: IPost = {
         id: Date.now(),
-        pid: uuidv4(),
+        pid: postRef.id,
         uid: options.uid,
         content: options.content,
         attachment: '',
@@ -111,7 +127,12 @@ export class Post {
 
       try {
         if (options.attachment) {
-          const gender = options.gender === Gender.MALE ? 'anh ấy' : options.gender === Gender.FEMALE ? 'cô ấy' : 'họ'
+          const gender =
+            options.gender === Gender.MALE
+              ? 'anh ấy'
+              : options.gender === Gender.FEMALE
+                ? 'cô ấy'
+                : 'họ'
           const attachment = await Attachment.upload(options.attachment)
           post.attachment = attachment.realid
 
@@ -134,8 +155,7 @@ export class Post {
           }
         }
 
-        await setDoc(doc(db, 'posts', post.pid), post)
-
+        await setDoc(postRef, post)
         return resolve(post)
       } catch (error) {
         Logger.error('Create post error', error)

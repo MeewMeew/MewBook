@@ -1,6 +1,6 @@
 {
   "name": "facebook-clone",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "scripts": {
     "build": "run-p type-check build-only",
@@ -19,10 +19,12 @@
     "@headlessui/vue": "^1.7.16",
     "@vueuse/core": "^10.2.1",
     "@vueuse/firebase": "^8.9.4",
+    "@vueuse/integrations": "^10.5.0",
     "@vueuse/sound": "^2.0.1",
     "axios": "^1.4.0",
     "emoji-mart-vue-fast": "^15.0.0",
     "firebase": "^10.4.0",
+    "floating-vue": "^2.0.0-beta.24",
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.1",
     "markdown-it-emoji": "^2.0.2",
@@ -39,6 +41,7 @@
     "vue-advanced-cropper": "^2.8.8",
     "vue-material-design-icons": "^5.2.0",
     "vue-router": "^4.2.2",
+    "vue3-colorpicker": "^2.2.2",
     "vue3-toastify": "^0.1.11"
   },
   "devDependencies": {

@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import { toRefs } from '@vueuse/core';
+import { toRefs } from '@vueuse/core'
 import { uniqBy } from 'lodash'
-import { storeToRefs } from 'pinia';
-import Skeleton from 'primevue/skeleton';
-import InfiniteLoading from "v3-infinite-loading";
+import { storeToRefs } from 'pinia'
+import Skeleton from 'primevue/skeleton'
+import InfiniteLoading from 'v3-infinite-loading'
 import { onBeforeMount, ref } from 'vue'
-import { toast } from 'vue3-toastify';
+import { toast } from 'vue3-toastify'
 
 import PostVue from '@/components/Post/Post.vue'
 import { Friend, Post } from '@/database'
-import { usePost } from '@/stores/post';
-import { useUser } from '@/stores/user';
-import { Privacy } from '@/types';
+import { usePost } from '@/stores/post'
+import { useUser } from '@/stores/user'
+import { Privacy } from '@/types'
 
 const props = defineProps({
   uid: {
@@ -21,7 +21,7 @@ const props = defineProps({
   avatar: {
     type: String,
     required: false
-  },
+  }
 })
 
 const limitNum = 5
@@ -34,7 +34,6 @@ const privacyMode = ref<any[]>([Privacy.PUBLIC])
 onBeforeMount(() => {
   lastDoc.value = 0
   posts.value = []
-
 })
 
 const load = async ($state: any) => {
@@ -55,12 +54,12 @@ const load = async ($state: any) => {
       limit: limitNum + lastDoc.value,
       sort: 'created_at',
       order: 'desc',
-      privacyMode: privacyMode.value,
+      privacyMode: privacyMode.value
     })
 
     posts.value = uniqBy([...data], 'pid')
 
-    if (((data.length <= lastDoc.value) && lastDoc.value !== 0) || data.length === 0) {
+    if ((data.length <= lastDoc.value && lastDoc.value !== 0) || data.length === 0) {
       $state.complete()
     } else {
       $state.loaded()
@@ -72,18 +71,23 @@ const load = async ($state: any) => {
   }
 }
 
-
 const deletePost = async (id: string) => {
   posts.value = posts.value.filter((p) => p.pid !== id)
   await Post.delete(id)
   toast.success('Đã xoá bài viết thành công.')
 }
-
 </script>
 
 <template>
   <div class="w-full">
-    <PostVue v-for="post in posts" :key="post.id" :post="post" :avatar="avatar" @delete-post="deletePost" :open="true"/>
+    <PostVue
+      v-for="post in posts"
+      :key="post.id"
+      :post="post"
+      :avatar="avatar"
+      @delete-post="deletePost"
+      :open="true"
+    />
     <InfiniteLoading @infinite="load">
       <template #spinner>
         <div class="border-round border-1 surface-border p-4 surface-card">
@@ -103,8 +107,7 @@ const deletePost = async (id: string) => {
         </div>
       </template>
       <template #complete>
-        <div class="flex justify-center items-center">
-        </div>
+        <div class="flex justify-center items-center"></div>
       </template>
       <template #error>
         <div></div>

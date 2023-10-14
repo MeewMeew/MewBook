@@ -6,7 +6,7 @@ const Tailwind: Config = {
   content: [
     './src/**/*.html',
     './src/**/*.vue',
-    "./node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}"
+    './node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}'
   ],
   theme: {
     extend: {
@@ -16,9 +16,20 @@ const Tailwind: Config = {
         'mb-gray': '#e4e6eb',
         'mb-gray-h': '#d0d2d6',
         'mb-gray-2': '#050505',
+        'mb-secondary': '#65676B'
       }
     },
     minWidth: {
+      xxs: '160px',
+      xs: '320px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px'
+    },
+    maxWidth: {
+      '1/2': '50%',
+      '2/3': '66.666667%',
       xxs: '160px',
       xs: '320px',
       sm: '640px',

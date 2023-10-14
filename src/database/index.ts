@@ -1,6 +1,7 @@
 export * from '@/database/attachment'
 export * from '@/database/comment'
 export * from '@/database/friend'
+export * from '@/database/messenger'
 export * from '@/database/notification'
 export * from '@/database/post'
 export * from '@/database/reaction'

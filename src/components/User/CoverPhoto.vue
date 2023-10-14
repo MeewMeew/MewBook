@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import Image from 'primevue/image';
-import { type PropType, ref } from 'vue';
-import { toast } from 'vue3-toastify';
+import { storeToRefs } from 'pinia'
+import Image from 'primevue/image'
+import { type PropType, ref } from 'vue'
+import { toast } from 'vue3-toastify'
 
-import { Attachment, Post } from '@/database';
-import { usePost } from '@/stores/post';
-import { useUser } from '@/stores/user';
-import type { IUser } from '@/types';
+import { Attachment, Post } from '@/database'
+import { usePost } from '@/stores/post'
+import { useUser } from '@/stores/user'
+import type { IUser } from '@/types'
 const props = defineProps({
   cover: {
     type: String as PropType<IUser['coverURL']>,
@@ -28,7 +28,7 @@ const imageView = ref<string | null>()
 const imageUpload = ref<File | null>()
 
 interface HTMLInputEvent extends Event {
-  target: HTMLInputElement & EventTarget;
+  target: HTMLInputElement & EventTarget
 }
 
 const getUploadedImage = (e: HTMLInputEvent) => {
@@ -50,7 +50,7 @@ const createPost = async () => {
       content: '',
       gender: cuser.value!.gender,
       attachment: imageUpload.value!,
-      isCoverPhoto: true,
+      isCoverPhoto: true
     })
 
     if (Attachment.isID(post.attachment as string)) {
@@ -64,7 +64,6 @@ const createPost = async () => {
 
     toast.success('Cập nhật ảnh bìa thành công')
   } catch (error: any) {
-
     console.log(error)
     toast.error('Đã có lỗi xảy ra, không thể cập nhật ảnh bìa')
   } finally {
@@ -72,49 +71,69 @@ const createPost = async () => {
 
     imageUpload.value = null
   }
-
 }
-
 </script>
 <template>
-  <div class="relative">
-    <Image :src="imageView || props.cover" preview :pt="{
-      root: {
-        class: 'w-full'
-      },
-      image: {
-        class: 'rounded-b-xl object-cover h-96 w-full'
-      },
-      button: {
-        class: [
-          'absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 ',
-          'bg-transparent text-gray-100',
-          'hover:opacity-20 hover:cursor-pointer hover:bg-white hover:bg-opacity-50',
-        ],
-        icon: {
-          class: 'hidden opacity-0'
+  <div class="relative" v-if="props.cover">
+    <Image
+      :src="imageUpload || props.cover"
+      preview
+      :pt="{
+        root: {
+          class: 'w-full'
+        },
+        image: {
+          class: 'rounded-b-xl object-cover h-96 w-full'
+        },
+        button: {
+          class: [
+            'absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 ',
+            'bg-transparent text-gray-100',
+            'hover:opacity-20 hover:cursor-pointer hover:bg-white hover:bg-opacity-50'
+          ],
+          icon: {
+            class: 'hidden opacity-0'
+          }
         }
-      }
-    }" />
+      }"
+    />
 
-    <div class="absolute right-5 bottom-0 -translate-y-1/2 flex flex-col" v-if="cuser?.id === props.uid">
-      <button class="flex items-center space-x-2 px-3 py-2 hover:bg-slate-100 hover:bg-opacity-20 rounded-lg"
+    <div
+      class="absolute right-5 bottom-0 -translate-y-1/2 flex flex-col"
+      v-if="cuser?.id === props.uid"
+    >
+      <button
+        class="flex items-center space-x-2 px-3 py-2 hover:bg-slate-100 hover:bg-opacity-20 rounded-lg"
         @click="upload?.click"
-        :disabled="loading">
+        :disabled="loading"
+      >
         <i class="pi pi-camera text-2xl text-white after:mix-blend-difference" />
-        <span class="text-white after:mix-blend-difference" v-if="!imageUpload">Chỉnh sửa ảnh bìa</span>
+        <span class="text-white after:mix-blend-difference" v-if="!imageUpload"
+          >Chỉnh sửa ảnh bìa</span
+        >
         <span class="text-white after:mix-blend-difference" v-else>Chọn ảnh bài khác</span>
       </button>
-      <button v-if="imageUpload"
+      <button
+        v-if="imageUpload"
         class="flex items-center space-x-2 px-3 py-2 hover:bg-slate-100 hover:bg-opacity-20 rounded-lg"
-        @click="createPost" :disabled="loading">
-        <i v-if="loading" class="pi pi-spin pi-spinner text-2xl text-white after:mix-blend-difference" />
+        @click="createPost"
+        :disabled="loading"
+      >
+        <i
+          v-if="loading"
+          class="pi pi-spin pi-spinner text-2xl text-white after:mix-blend-difference"
+        />
         <i v-else class="pi pi-upload text-2xl text-white after:mix-blend-difference" />
         <span class="text-white after:mix-blend-difference">Cập nhật ảnh bìa</span>
       </button>
 
-      <input type="file" accept="image/*" ref="upload" class="hidden"
-        @input="getUploadedImage($event as HTMLInputEvent)" />
+      <input
+        type="file"
+        accept="image/*"
+        ref="upload"
+        class="hidden"
+        @input="getUploadedImage($event as HTMLInputEvent)"
+      />
     </div>
   </div>
 </template>

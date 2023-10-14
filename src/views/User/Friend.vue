@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { debounce } from 'lodash';
-import Avatar from 'primevue/avatar';
-import Button from 'primevue/button';
-import { computed, onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { debounce } from 'lodash'
+import Avatar from 'primevue/avatar'
+import Button from 'primevue/button'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
-import { Attachment, Friend, User } from '@/database';
-import { protectEmail } from '@/helpers/protected';
-import type { IUser } from '@/types';
+import { Attachment, Friend, User } from '@/database'
+import { protectEmail } from '@/helpers/protected'
+import type { IUser } from '@/types'
 
 const router = useRouter()
 
-const search = ref<string>('');
+const search = ref<string>('')
 const friends = ref<IUser[]>([])
 const fsearch = ref<IUser[]>([])
 
@@ -43,15 +43,17 @@ onMounted(async () => {
   fsearch.value = friends.value
 })
 
-watch(search, debounce(async (value) => {
-  if (value === '') fsearch.value = friends.value
-  else {
-    fsearch.value = friends.value.filter((item) => {
-      return item.displayName.toLowerCase().includes(value.toLowerCase())
-    })
-  }
-}, 500))
-
+watch(
+  search,
+  debounce(async (value) => {
+    if (value === '') fsearch.value = friends.value
+    else {
+      fsearch.value = friends.value.filter((item) => {
+        return item.displayName.toLowerCase().includes(value.toLowerCase())
+      })
+    }
+  }, 300)
+)
 </script>
 <template>
   <div class="w-full h-full rounded-lg bg-white my-4 p-5">
@@ -60,10 +62,16 @@ watch(search, debounce(async (value) => {
         <span class="text-xl font-medium">Bạn bè</span>
       </div>
       <div class="flex flex-row space-x-3">
-        <div class="flex bg-[#EFF2F5] items-center justify-start w-full rounded-full cursor-pointer py-2">
+        <div
+          class="flex bg-[#EFF2F5] items-center justify-start w-full rounded-full cursor-pointer py-1.5"
+        >
           <i class="pi pi-search pl-3 mx-auto text-[#64676B] text-lg" />
-          <input type="text" placeholder="Tìm kiếm bạn bè" v-model="search"
-            class="outline-none border-none h-3 bg-transparent w-full inline-block px-3 py-3" />
+          <input
+            type="text"
+            placeholder="Tìm kiếm bạn bè"
+            v-model="search"
+            class="outline-none border-none h-3 bg-transparent w-full inline-block px-3 py-3"
+          />
         </div>
         <div class="w-full">
           <router-link :to="{ name: 'friends' }">
@@ -79,16 +87,25 @@ watch(search, debounce(async (value) => {
       <div class="h-[100px] w-full rounded-md border" v-for="(item, index) in fsearch" :key="index">
         <router-link :to="{ name: 'user', params: { id: item.id } }">
           <div
-            class="flex flex-row items-center justify-start w-full h-full rounded-md cursor-pointer hover:bg-[#EFF2F5] transition-all space-x-5 px-5">
+            class="flex flex-row items-center justify-start w-full h-full rounded-md cursor-pointer hover:bg-[#EFF2F5] transition-all space-x-5 px-5"
+          >
             <div class="cursor-pointer">
-              <Avatar :image="item.photoURL" size="xlarge" :pt="{
-                root: 'w-16 h-16',
-                image: 'rounded-lg w-full h-full'
-              }" />
+              <Avatar
+                :image="item.photoURL"
+                size="xlarge"
+                :pt="{
+                  root: 'w-16 h-16',
+                  image: 'rounded-lg w-full h-full'
+                }"
+              />
             </div>
             <div class="flex flex-col w-full space-y-1">
-              <span class="text-[#050505] text-lg font-medium truncate">{{ item.displayName }}</span>
-              <span class="text-[#050505] text-md font-medium truncate">{{ protectEmail(item.email, '*') }}</span>
+              <span class="text-[#050505] text-lg font-medium truncate">{{
+                item.displayName
+              }}</span>
+              <span class="text-[#050505] text-md font-medium truncate">{{
+                protectEmail(item.email, '*')
+              }}</span>
             </div>
           </div>
         </router-link>

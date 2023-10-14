@@ -12,19 +12,19 @@ interface CreateCommentOptions {
   attachment?: string
 }
 
-
 export class Comment {
   public static async create(options: CreateCommentOptions) {
+    const commentRef = doc(db, 'comments', uuidv4())
     const commentData: IComment = {
       id: Date.now(),
-      cid: uuidv4(),
+      cid: commentRef.id,
       uid: options.uid,
       pid: options.pid,
       aid: options.aid,
       content: options.content,
       created_at: Date.now()
     }
-    await setDoc(doc(db, 'comments', commentData.cid), commentData)
+    await setDoc(commentRef, commentData)
     return commentData
   }
 

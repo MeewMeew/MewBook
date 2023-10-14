@@ -1,11 +1,27 @@
-import { Socket } from "socket.io-client";
+import { Socket } from 'socket.io-client'
 
-import { type IAttachmentItem,type IComment, type IFriendEvent, type INotification,type IReaction, SEvent } from "@/types";
+import {
+  type IAttachmentItem,
+  type IComment,
+  type IFriendEvent,
+  type INotification,
+  type IReaction,
+  SEvent
+} from '@/types'
 
-type CallbackAttachmentUpload = (result: { error: unknown, attachments: IAttachmentItem }) => void
+import type { InComingMessage } from './messenger'
+
+type CallbackAttachmentUpload = (result: { error: unknown; attachments: IAttachmentItem }) => void
 type CallbackAttachmentGet = (error: unknown) => void
+type CallbackMessageSend = (error: unknown) => void
 
-export interface ServerToClientEvents {
+export enum MessengerEvent {
+  SEND_MESSAGE = 'send:message',
+  RECEIVE_MESSAGE = 'receive:message',
+  BOARDCAST = 'boardcast'
+}
+
+export interface ServerToClientCommonEvents {
   [SEvent.NOTIFICATION_CREATE]: (notification: INotification) => void
   [SEvent.NOTIFICATION_REMOVE]: (notification: INotification) => void
   [SEvent.NOTIFICATION_UPDATE]: (notification: INotification) => void
@@ -13,9 +29,12 @@ export interface ServerToClientEvents {
 
   [SEvent.FRIEND_ONLINE]: (userID: number) => void
   [SEvent.FRIEND_OFFLINE]: (userID: number) => void
+
+  [MessengerEvent.RECEIVE_MESSAGE]: (message: InComingMessage) => void
+  [MessengerEvent.BOARDCAST]: (conversation_id: string, data: any) => void
 }
 
-export interface ClientToServerEvents {
+export interface ClientToServerCommonEvents {
   [SEvent.SOCKET_CONNECT]: () => void
   [SEvent.SOCKET_DISCONNECT]: () => void
 
@@ -40,6 +59,9 @@ export interface ClientToServerEvents {
   [SEvent.ATTACHMENT_REMOVE]: (attachment_id: string) => void
   [SEvent.ATTACHMENT_GET]: (attachment_id: string, callback: CallbackAttachmentGet) => void
 
+  [MessengerEvent.SEND_MESSAGE]: (message: InComingMessage, callback: CallbackMessageSend) => void
 }
 
-export type SocketClient = Socket<ServerToClientEvents, ClientToServerEvents>
+export type MewBookClient = Socket<ServerToClientCommonEvents, ClientToServerCommonEvents>
+
+export type MewMessengerClient = Socket<ServerToClientCommonEvents, ClientToServerCommonEvents>

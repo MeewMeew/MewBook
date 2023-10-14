@@ -1,30 +1,27 @@
 <script setup lang="ts">
+import emojiData from 'emoji-mart-vue-fast/data/twitter.json'
 // @ts-ignore
-import "emoji-mart-vue-fast/css/emoji-mart.css";
-
-import emojiData from "emoji-mart-vue-fast/data/twitter.json";
-// @ts-ignore
-import { EmojiIndex, Picker } from "emoji-mart-vue-fast/src";
+import { EmojiIndex, Picker } from 'emoji-mart-vue-fast/src'
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
-import { omit } from "lodash";
-import { storeToRefs } from 'pinia';
-import Avatar from 'primevue/avatar';
-import OverlayPanel from "primevue/overlaypanel";
+import { omit } from 'lodash'
+import { storeToRefs } from 'pinia'
+import Avatar from 'primevue/avatar'
+import OverlayPanel from 'primevue/overlaypanel'
 import Textarea from 'primevue/textarea'
-import { onMounted, ref, toRefs } from 'vue';
+import { onMounted, ref, toRefs } from 'vue'
 
-import Send from '@/components/Icons/Send.vue';
+import Send from '@/components/Icons/Send.vue'
 import PostComment from '@/components/Post/PostComment.vue'
 import { Comment, User } from '@/database'
-import { formatContentBreakLine } from '@/helpers/format';
-import { mewSocket } from "@/helpers/socket";
-import { STICKERS_URL } from "@/shared/constants";
-import { db } from '@/shared/firebase';
-import { useComment } from '@/stores/comment';
-import { useSticker } from "@/stores/sticker";
-import { useUser } from '@/stores/user';
-import type { IComment, ICommentNUser, INotification, IUser } from "@/types/index";
-import { NotificationType, SEvent } from '@/types/index';
+import { formatContentBreakLine } from '@/helpers/format'
+import { mewSocket } from '@/helpers/socket'
+import { STICKERS_URL } from '@/shared/constants'
+import { db } from '@/shared/firebase'
+import { useComment } from '@/stores/comment'
+import { useSticker } from '@/stores/sticker'
+import { useUser } from '@/stores/user'
+import type { IComment, ICommentNUser, INotification, IUser } from '@/types/index'
+import { NotificationType, SEvent } from '@/types/index'
 
 const props = defineProps({
   pid: {
@@ -49,7 +46,6 @@ const { commentSync } = storeToRefs(useComment())
 const { cuser } = storeToRefs(useUser())
 const { stickers } = storeToRefs(useSticker())
 
-
 const op = ref()
 const comment = ref<string>('')
 const comments = ref<ICommentNUser[]>([])
@@ -70,7 +66,7 @@ const createComment = async () => {
     uid: cuser.value?.id as number,
     pid: props.pid,
     aid: props.uid,
-    content: content,
+    content: content
   })
 
   mewSocket.emit(SEvent.POST_COMMENT_ADD, commentData)
@@ -98,7 +94,11 @@ onMounted(async () => {
   async function loadCurrentComments(reload = false) {
     const userRef = collection(db, 'users')
     const commentRef = collection(db, 'comments')
-    const queryComment = query(commentRef, where('pid', '==', props.pid), orderBy('created_at', 'desc'))
+    const queryComment = query(
+      commentRef,
+      where('pid', '==', props.pid),
+      orderBy('created_at', 'desc')
+    )
     const querySnapComment = await getDocs(queryComment)
     querySnapComment.forEach(async (doc) => {
       const commentData = doc.data() as IComment
@@ -149,45 +149,84 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col">
-
     <div class="px-3">
       <div class="flex items-center justify-between py-2" v-if="cuser">
         <div class="flex items-center w-full">
           <router-link :to="{ name: 'user', params: { id: cuser.id } }" class="mr-2">
-            <Avatar :image="cuser.photoURL" shape="circle" :pt="{
-              root: 'w-10 h-10',
-              image: 'rounded-full w-full h-full'
-            }" />
+            <Avatar
+              :image="cuser.photoURL"
+              shape="circle"
+              :pt="{
+                root: 'w-10 h-10',
+                image: 'rounded-full w-full h-full'
+              }"
+            />
           </router-link>
-          <form class="flex flex-col items-center justify-center bg-[#EFF2F5] px-1 rounded-xl w-full overflow-hidden"
-            @submit.prevent="createComment">
+          <form
+            class="flex flex-col items-center justify-center bg-[#EFF2F5] px-1 rounded-xl w-full overflow-hidden"
+            @submit.prevent="createComment"
+          >
             <div class="w-full">
-              <Textarea v-model="comment" placeholder="Viết bình luận..." rows="1" autoResize :pt="{
-                root: 'w-full text-md mx-1 border-none p-0 bg-[#EFF2F5] placeholder-[#64676B] ring-0 focus:ring-0 pt-1 outline-none pl-2 h-auto resize-none rounded-lg'
-              }" @keydown.enter.exact.prevent="createComment" />
+              <Textarea
+                v-model="comment"
+                placeholder="Viết bình luận..."
+                rows="1"
+                autoResize
+                :pt="{
+                  root: 'w-full text-md mx-1 border-none p-0 bg-[#EFF2F5] placeholder-[#64676B] ring-0 focus:ring-0 pt-1 outline-none pl-2 h-auto resize-none rounded-lg'
+                }"
+                @keydown.enter.exact.prevent="createComment"
+              />
             </div>
             <div class="flex flex-row justify-between items-center w-full px-3 pb-2">
               <div class="flex flex-row justify-center items-center space-x-2">
-                <i class="pi pi-star text-zinc-300 hover:text-zinc-400 cursor-pointer" style="font-size: large;" />
-                <i class="pi pi-camera text-zinc-300 hover:text-zinc-400 cursor-pointer" style="font-size: large;" />
-                <i class="pi pi-heart text-zinc-300 hover:text-zinc-400 cursor-pointer" style="font-size: large;"
-                  @click="toggle" />
+                <i
+                  class="pi pi-star text-zinc-300 hover:text-zinc-400 cursor-pointer"
+                  style="font-size: large"
+                />
+                <i
+                  class="pi pi-camera text-zinc-300 hover:text-zinc-400 cursor-pointer"
+                  style="font-size: large"
+                />
+                <i
+                  class="pi pi-heart text-zinc-300 hover:text-zinc-400 cursor-pointer"
+                  style="font-size: large"
+                  @click="toggle"
+                />
                 <OverlayPanel ref="op" append-to="body">
-                  <Picker @select="selectEmoji" :data="emojiIndex" set="facebook" :showPreview="false" :showSearch="false"
-                    :showSkinTones="false" />
+                  <Picker
+                    @select="selectEmoji"
+                    :data="emojiIndex"
+                    set="facebook"
+                    :showPreview="false"
+                    :showSearch="false"
+                    :showSkinTones="false"
+                  />
                 </OverlayPanel>
               </div>
-              <button type="submit" :disabled="!comment" :class="{ ['cursor-not-allowed']: !comment }"
-                class="flex items-center text-sm p-1.5 rounded-full hover:bg-zinc-200 text-white font-bold">
-                <Send size="20" :fill="comment !== ''" />
+              <button
+                type="submit"
+                :disabled="!comment"
+                :class="{ ['cursor-not-allowed']: !comment }"
+                class="flex items-center text-sm p-1.5 rounded-full hover:bg-zinc-200 text-white font-bold"
+              >
+                <Send size="20" :disabled="comment === ''" />
               </button>
             </div>
           </form>
         </div>
       </div>
     </div>
-    <div v-if="comments" class="pb-2 px-4 overflow-y-scroll nice-scrollbar" :class="{ 'max-h-[300px]': scrollable }">
-      <div class="flex items-center justify-between my-2 max-w-[610px]" v-for="c in comments" :key="c.id">
+    <div
+      v-if="comments"
+      class="pb-2 px-4 overflow-y-scroll nice-scrollbar"
+      :class="{ 'max-h-[300px]': scrollable }"
+    >
+      <div
+        class="flex items-center justify-between my-2 max-w-[610px]"
+        v-for="c in comments"
+        :key="c.id"
+      >
         <PostComment :comment="c" @delete-comment="deleteComment" />
       </div>
     </div>

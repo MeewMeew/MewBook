@@ -1,17 +1,19 @@
-import { Privacy, ReactionType } from "@/types";
+import type { UseTimeAgoMessages, UseTimeAgoUnitNamesDefault } from '@vueuse/core'
 
-export const toBlobUrl = async(base64: string) => {
+import { Privacy, ReactionType } from '@/types'
+
+export const toBlobUrl = async (base64: string) => {
   const res = await fetch(base64)
   const blob = await res.blob()
-  const url = URL.createObjectURL(blob);
+  const url = URL.createObjectURL(blob)
   return url
 }
 
 interface IReactionDefine {
-  name: ReactionType;
-  gif: string;
-  color: string;
-  icon: string;
+  name: ReactionType
+  gif: string
+  color: string
+  icon: string
 }
 
 export const REACTIONS: IReactionDefine[] = [
@@ -59,7 +61,8 @@ export const REACTIONS: IReactionDefine[] = [
   }
 ]
 
-export const STICKERS_URL  = 'https://cdn.jsdelivr.net/gh/naptestdev/zalo-stickers/data/favourite.json'
+export const STICKERS_URL =
+  'https://cdn.jsdelivr.net/gh/naptestdev/zalo-stickers/data/favourite.json'
 
 export const PrivacyOptions = [
   {
@@ -76,5 +79,32 @@ export const PrivacyOptions = [
     icon: '/icons/privacy/private.png',
     text: 'Riêng tư',
     type: Privacy.PRIVATE
-  },
+  }
 ]
+
+export const defaultFormatTimeMessages: UseTimeAgoMessages<UseTimeAgoUnitNamesDefault> = {
+  justNow: 'Vừa xong',
+  past: (n) => (n.match(/\d/) ? `${n} trước` : n),
+  future: (n) => (n.match(/\d/) ? `sau ${n}` : n),
+  year: (n) => `${n} năm`,
+  month: (n) => `${n} tháng`,
+  week: (n) => `${n} tuần`,
+  day: (n) => `${n} ngày`,
+  hour: (n) => `${n} giờ`,
+  minute: (n) => `${n} phút`,
+  second: (n) => `${n} giây`,
+  invalid: ''
+}
+export const defaultFormatTimeMessages2: UseTimeAgoMessages<UseTimeAgoUnitNamesDefault> = {
+  justNow: 'Vừa xong',
+  past: (n) => n,
+  future: (n) => n,
+  year: (n) => `${n} năm`,
+  month: (n) => `${n} tháng`,
+  week: (n) => `${n} tuần`,
+  day: (n) => `${n} ngày`,
+  hour: (n) => `${n} giờ`,
+  minute: (n) => `${n} phút`,
+  second: (n) => `${n} giây`,
+  invalid: ''
+}

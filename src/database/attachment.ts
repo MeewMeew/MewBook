@@ -8,13 +8,14 @@ import { type IAttachment, type IAttachmentItem, SEvent } from '@/types'
 
 export class Attachment {
   public static async create(attachments: IAttachmentItem) {
+    const attachmentRef = doc(db, 'attachments', uuidv4())
     const attachmentData: IAttachment = {
       id: Date.now(),
-      realid: uuidv4(),
+      realid: attachmentRef.id,
       attachments: attachments,
       created_at: Date.now()
     }
-    await setDoc(doc(db, 'attachments', attachmentData.realid), attachmentData)
+    await setDoc(attachmentRef, attachmentData)
     return attachmentData
   }
 
@@ -48,11 +49,11 @@ export class Attachment {
   }
 
   public static blob<T>(dataURL: string): T {
-    const byteString = atob(dataURL.split(',')[1]);
-    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
-    return new Blob([ab], { type: mimeString }) as T;
+    const byteString = atob(dataURL.split(',')[1])
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
+    return new Blob([ab], { type: mimeString }) as T
   }
 }

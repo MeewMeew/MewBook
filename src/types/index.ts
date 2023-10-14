@@ -95,16 +95,16 @@ export enum NotificationType {
   FRIEND_ACCEPT = 'friend_accept',
   FRIEND_REMOVE = 'friend_remove',
   FRIEND_REJECT = 'friend_reject',
-  FRIEND_CANCEL = 'friend_cancel',
+  FRIEND_CANCEL = 'friend_cancel'
 }
 
 export type ICommentNUser = IComment & { user: IUser }
 
 export type IAttachment = {
-  id: number;
-  realid: string;
+  id: number
+  realid: string
   attachments: IAttachmentItem
-  created_at: number;
+  created_at: number
 }
 
 export type IAttachmentItem = {
@@ -114,25 +114,24 @@ export type IAttachmentItem = {
 }
 
 export type IAttachmentStore = {
-  id: string,
+  id: string
   attachment: string
 }
-
 
 export enum FriendEventType {
   FRIEND_REQUEST = 'friend_request',
   FRIEND_ACCEPT = 'friend_accept',
   FRIEND_REMOVE = 'friend_remove',
   FRIEND_REJECT = 'friend_reject',
-  FRIEND_CANCEL = 'friend_cancel',
+  FRIEND_CANCEL = 'friend_cancel'
 }
 
 export type IFriendEvent = {
-  id: number,
-  aid: number,
-  uid: number,
-  fid: number,
-  type: FriendEventType,
+  id: number
+  aid: number
+  uid: number
+  fid: number
+  type: FriendEventType
   created_at: number
 }
 
@@ -165,18 +164,24 @@ export enum SEvent {
 
   ATTACHMENT_UPLOAD = 'attachment:upload',
   ATTACHMENT_REMOVE = 'attachment:remove',
-  ATTACHMENT_GET = 'attachment:get',
+  ATTACHMENT_GET = 'attachment:get'
 }
 
 export interface StickerCollection {
-  name: string;
-  thumbnail: string;
-  icon: string;
-  id: string;
+  name: string
+  thumbnail: string
+  icon: string
+  id: string
   stickers: {
-    id: string;
-    spriteURL: string;
-  }[];
+    id: string
+    spriteURL: string
+  }[]
 }
 
-export type StickerCollections = StickerCollection[];
+export type StickerCollections = StickerCollection[]
+
+export interface InfiniteState {
+  complete: () => void
+  error: () => void
+  loaded: () => void
+}

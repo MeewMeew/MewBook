@@ -17,8 +17,11 @@ module.exports = {
   },
   rules: {
     'vue/multi-word-component-names': 'off',
-    "simple-import-sort/imports": "warn",
-    "simple-import-sort/exports": "warn",
+    'simple-import-sort/imports': 'warn',
+    'simple-import-sort/exports': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
+    'vue/valid-template-root': 'off',
+    'indent': ['warn', 2],
+    'quotes': ['warn', 'single'],
   }
 }
