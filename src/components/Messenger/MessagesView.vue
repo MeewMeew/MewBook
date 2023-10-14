@@ -41,7 +41,7 @@ const { cuser } = storeToRefs(useUser())
 const messages = ref<InComingMessage[]>([])
 const isWindowFocused = useWindowFocus()
 const title = useTitle()
-const { play } = useSound('/sounds/noti.mp3')
+const { play } = useSound('/sound/noti.mp3', { volume: 0.25 })
 
 async function loadMessages(state: InfiniteState) {
   try {

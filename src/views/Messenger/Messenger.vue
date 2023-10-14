@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { formatTimeAgo } from '@vueuse/core'
-import { map, some, uniqBy } from 'lodash'
+import { map, some, sortBy, uniqBy } from 'lodash'
 import { storeToRefs } from 'pinia'
 import Avatar from 'primevue/avatar'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUpdated, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { Friend, Messenger } from '@/database'
@@ -61,6 +61,7 @@ onMounted(async () => {
     if (_conversation) {
       _conversation.messages.unshift(message)
     }
+    conversations.value = sortBy(conversations.value, (c) => c.messages[0]?.timestamp).reverse()
   })
 })
 

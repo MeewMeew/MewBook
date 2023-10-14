@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import 'vue3-colorpicker/style.css'
 
-import { find } from 'lodash'
+import { find, sortBy } from 'lodash'
 import { storeToRefs } from 'pinia'
 import Avatar from 'primevue/avatar'
 import { onMounted, ref } from 'vue'
@@ -72,6 +72,7 @@ function updateThemeColor(color: HexType) {
       conversations.value
         .find((c) => c.id === conversation.value!.id)!
         .messages.unshift(buildMessage)
+      conversations.value = sortBy(conversations.value, (c) => c.messages[0]?.timestamp).reverse()
     }
   })
   conversation.value!.theme = color
@@ -99,6 +100,7 @@ function sendMessage(message: string) {
       conversations.value
         .find((c) => c.id === conversation.value!.id)!
         .messages.unshift(builtMessage)
+      conversations.value = sortBy(conversations.value, (c) => c.messages[0]?.timestamp).reverse()
     }
   })
 }
@@ -119,6 +121,7 @@ function sendLike() {
       conversations.value
         .find((c) => c.id === conversation.value!.id)!
         .messages.unshift(buildMessage)
+      conversations.value = sortBy(conversations.value, (c) => c.messages[0]?.timestamp).reverse()
     }
   })
 }
