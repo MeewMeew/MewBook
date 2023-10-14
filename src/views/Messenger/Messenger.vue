@@ -3,7 +3,7 @@ import { formatTimeAgo } from '@vueuse/core'
 import { map, some, sortBy, uniqBy } from 'lodash'
 import { storeToRefs } from 'pinia'
 import Avatar from 'primevue/avatar'
-import { computed, onMounted, onUpdated, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { Friend, Messenger } from '@/database'
