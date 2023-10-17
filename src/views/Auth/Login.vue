@@ -42,6 +42,10 @@ async function submit() {
       }
       setUser(user)
       form.processing = false
+      if (!user.verified) {
+        Logger.warn('User not verified')
+        return router.push({ name: 'checkpoint' })
+      }
       return router.push({ name: 'dashboard' })
     })
     .catch((error) => {

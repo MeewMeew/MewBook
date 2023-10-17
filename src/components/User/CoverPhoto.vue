@@ -74,9 +74,9 @@ const createPost = async () => {
 }
 </script>
 <template>
-  <div class="relative" v-if="props.cover">
+  <div class="relative">
     <Image
-      :src="imageUpload || props.cover"
+      :src="imageView || props.cover || Attachment.defaultCover"
       preview
       :pt="{
         root: {

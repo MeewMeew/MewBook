@@ -76,7 +76,7 @@ export class Post {
         return post
       }
     } catch (error) {
-      console.error('Get post error', error)
+      Logger.error('Get post error', error)
       return null
     }
   }
@@ -104,7 +104,7 @@ export class Post {
       }
       return posts
     } catch (error) {
-      console.error('Get all post error', error)
+      Logger.error('Get all post error', error)
       return []
     }
   }

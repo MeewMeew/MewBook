@@ -33,7 +33,9 @@ onMounted(async () => {
 
   if (_friend) {
     friends.value = _friend.friends
+    Logger.info(_friend.friends)
     for (const _id of _friend.friends) {
+      Logger.info(_id)
       const participants = [parseInt(_id), cuser.value!.id]
       const contains = some(
         _cParticipants,
@@ -55,6 +57,7 @@ onMounted(async () => {
     __conversations.push(__fill)
   }
   conversations.value = uniqBy(__conversations, 'id')
+  Logger.info(conversations.value)
 
   mewSocket.on(MessengerEvent.RECEIVE_MESSAGE, (message: InComingMessage) => {
     const _conversation = conversations.value.filter((c) => c.id === message.cid)[0]

@@ -199,7 +199,7 @@ onBeforeMount(async () => {
         <div class="flex md:flex-row flex-col gap-4 md:-mt-10 -mt-16 items-center">
           <div class="relative">
             <Image
-              :src="user.photoURL"
+              :src="user.photoURL || Attachment.defaultAvatar"
               preview
               :pt="{
                 image: {

@@ -56,4 +56,16 @@ export class Attachment {
     for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
     return new Blob([ab], { type: mimeString }) as T
   }
+
+  public static get defaultCover() {
+    return `${
+      import.meta.env.VITE_API_URL
+    }/a/AgACAgUAAxkDAAO3ZRum6I6LUhYNvI0Pkij1_-mw8pUAAr67MRvgzMlU5_6ZmN8PV08BAAMCAAN3AAMwBA`
+  }
+
+  public static get defaultAvatar() {
+    return `${
+      import.meta.env.VITE_API_URL
+    }/a/AgACAgUAAxkDAAOvZRrhkWFjIZVVKGmOEhMzAAG742KCAAKauDEb4x7YVP9gQRZHpGNUAQADAgADeQADMAQ`
+  }
 }

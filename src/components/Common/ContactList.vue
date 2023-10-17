@@ -23,32 +23,39 @@ const loading = reactive({
 const hasFriends = computed(() => friends.value.length > 0)
 
 async function loadContacts() {
-  const res = await Friend.getByUID(cuser.value?.id!)
-  if (res) {
-    const _friends = []
-    for (let id of res.friends) {
-      const user = await User.get({ id: parseInt(id) })
-      if (user) {
-        if (Attachment.isID(user.photoURL)) {
-          const attachment = await Attachment.get(user.photoURL)
-          user.photoURL = await Attachment.image(attachment.attachments.medium)
-          _friends.push(user)
-        }
-      }
-    }
-    friends.value = _friends
+  try {
+    if (!cuser.value) return
+    Logger.info('loadContacts', cuser.value.id)
+    const res = await Friend.getByUID(cuser.value.id)
 
-    const receiveID = res.received.pop()
-    if (receiveID) {
-      const user = await User.get({ id: parseInt(receiveID) })
-      if (user) {
-        if (Attachment.isID(user.photoURL)) {
-          const attachment = await Attachment.get(user.photoURL)
-          user.photoURL = await Attachment.image(attachment.attachments.medium)
-          receive.value = user
+    if (res) {
+      const _friends = []
+      for (let id of res.friends) {
+        const user = await User.get({ id: parseInt(id) })
+        if (user) {
+          if (Attachment.isID(user.photoURL)) {
+            const attachment = await Attachment.get(user.photoURL)
+            user.photoURL = await Attachment.image(attachment.attachments.medium)
+            _friends.push(user)
+          }
+        }
+      }
+      friends.value = _friends
+
+      const receiveID = res.received.pop()
+      if (receiveID) {
+        const user = await User.get({ id: parseInt(receiveID) })
+        if (user) {
+          if (Attachment.isID(user.photoURL)) {
+            const attachment = await Attachment.get(user.photoURL)
+            user.photoURL = await Attachment.image(attachment.attachments.medium)
+            receive.value = user
+          }
         }
       }
     }
+  } catch (error) {
+    Logger.error('Error while loading contacts', error)
   }
 }
 

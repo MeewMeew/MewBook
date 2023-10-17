@@ -9,6 +9,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import { toast } from 'vue3-toastify'
 
 import { Attachment, Post } from '@/database'
+import { Logger } from '@/helpers/logger'
 import { usePost } from '@/stores/post'
 import { useUser } from '@/stores/user'
 
@@ -61,7 +62,7 @@ const crop = async () => {
     toast.success('Cập nhật ảnh đại diện thành công')
     emit('showModal', false)
   } catch (err) {
-    console.error(err)
+    Logger.error('update profile photo', err)
     error.value = err
     toast.error('Đã có lỗi xảy ra, không thể cập nhật ảnh đại diện')
   } finally {

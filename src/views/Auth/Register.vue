@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth'
 import RadioButton from 'primevue/radiobutton'
-import { badWords } from 'vn-badwords'
 import { onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -46,7 +45,6 @@ function submit() {
   if (!form.email) form.errors.email = 'Vui lòng nhập email của bạn'
   if (!form.password || !form.repassword) form.errors.password = 'Vui lòng nhập mật khẩu của bạn'
   if (form.password !== form.repassword) form.errors.repassword = 'Mật khẩu không khớp'
-  if (badWords(form.name, { validate: true, blackList: defaultList => [...defaultList, 'mẹ'] })) form.errors.name = 'Tên của bạn không hợp lệ'
 
   setTimeout(() => {
     form.errors.name = ''
@@ -112,65 +110,119 @@ function submit() {
 <template>
   <GuestLayout>
     <div class="max-w-lg w-full flex flex-col lg:flex-row justify-around items-center">
-      <div class="text-left flex flex-col lg:-mt-10 mb-10 items-center justify-center lg:items-start">
+      <div
+        class="text-left flex flex-col lg:-mt-10 mb-10 items-center justify-center lg:items-start"
+      >
         <h1 class="text-mb-blue text-7xl font-bold px-6 py-3">mewbook</h1>
         <h2 class="lg:text-2xl font-normal px-6 text-center text-md lg:text-left w-4/5 lg:w-full">
           Mewbook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn.
         </h2>
       </div>
       <div class="w-full md:w-3/5 text-center mx-auto">
-        <form @submit.prevent="submit"
-          class="form-container bg-white shadow-md rounded-lg py-8 px-6 w-full min-w-[400px]">
+        <form
+          @submit.prevent="submit"
+          class="form-container bg-white shadow-md rounded-lg py-8 px-6 w-full min-w-[400px]"
+        >
           <div>
-            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus
-              autocomplete="name" placeholder="Tên của bạn" />
+            <TextInput
+              id="name"
+              type="text"
+              class="mt-1 block w-full"
+              v-model="form.name"
+              required
+              autofocus
+              autocomplete="name"
+              placeholder="Tên của bạn"
+            />
 
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
           <div class="mt-4">
-            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required
-              autocomplete="email" placeholder="Email của bạn" />
+            <TextInput
+              id="email"
+              type="email"
+              class="mt-1 block w-full"
+              v-model="form.email"
+              required
+              autocomplete="email"
+              placeholder="Email của bạn"
+            />
 
             <InputError class="mt-2" :message="form.errors.email" />
           </div>
 
           <div class="mt-4">
-            <TextInput id="new-password" type="password" class="mt-1 block w-full" v-model="form.password" required
-              autocomplete="new-password" placeholder="Mật khẩu mới" />
+            <TextInput
+              id="new-password"
+              type="password"
+              class="mt-1 block w-full"
+              v-model="form.password"
+              required
+              autocomplete="new-password"
+              placeholder="Mật khẩu mới"
+            />
 
             <InputError class="mt-2" :message="form.errors.password" />
           </div>
           <div class="mt-4">
-            <TextInput id="re-password" type="password" class="mt-1 block w-full" v-model="form.repassword" required
-              autocomplete="re-password" placeholder="Nhập lại mật khẩu" />
+            <TextInput
+              id="re-password"
+              type="password"
+              class="mt-1 block w-full"
+              v-model="form.repassword"
+              required
+              autocomplete="re-password"
+              placeholder="Nhập lại mật khẩu"
+            />
 
             <InputError class="mt-2" :message="form.errors.repassword" />
           </div>
 
           <div class="flex justify-between flex-wrap gap-3 mt-4 px-3">
             <div class="flex align-items-center">
-              <RadioButton v-model="form.gender" inputId="gender1" name="gender" :value="Gender.MALE" />
+              <RadioButton
+                v-model="form.gender"
+                inputId="gender1"
+                name="gender"
+                :value="Gender.MALE"
+              />
               <label for="form.gender1" class="ml-2">Nam</label>
             </div>
             <div class="flex align-items-center">
-              <RadioButton v-model="form.gender" inputId="gender2" name="gender" :value="Gender.FEMALE" />
+              <RadioButton
+                v-model="form.gender"
+                inputId="gender2"
+                name="gender"
+                :value="Gender.FEMALE"
+              />
               <label for="form.gender2" class="ml-2">Nữ</label>
             </div>
             <div class="flex align-items-center">
-              <RadioButton v-model="form.gender" inputId="gender3" name="gender" :value="Gender.OTHER" />
+              <RadioButton
+                v-model="form.gender"
+                inputId="gender3"
+                name="gender"
+                :value="Gender.OTHER"
+              />
               <label for="form.gender3" class="ml-2">Khác</label>
             </div>
           </div>
           <div class="flex items-center justify-center pt-4">
-            <TotalButton class="w-full mb-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
-              bstyle="success">
+            <TotalButton
+              class="w-full mb-4"
+              :class="{ 'opacity-25': form.processing }"
+              :disabled="form.processing"
+              bstyle="success"
+            >
               Đăng ký
             </TotalButton>
           </div>
 
           <div class="flex items-center justify-center mb-4">
-            <router-link to="/login"
-              class="hover:underline font-medium text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <router-link
+              to="/login"
+              class="hover:underline font-medium text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
               Đã có tài khoản?
             </router-link>
           </div>

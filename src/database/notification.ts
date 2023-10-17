@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore'
 import _ from 'lodash'
 
+import { Logger } from '@/helpers/logger'
 import { db } from '@/shared/firebase'
 import type { INotification } from '@/types'
 
@@ -54,7 +55,7 @@ export class Notification {
       const notis = notiSnap.docs.map((e) => e.data()) as INotification[]
       return notis
     } catch (error) {
-      console.error('Get all notification error', error)
+      Logger.error('Get all notification error', error)
       return []
     }
   }

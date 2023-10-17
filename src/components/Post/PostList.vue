@@ -4,11 +4,12 @@ import { uniqBy } from 'lodash'
 import { storeToRefs } from 'pinia'
 import Skeleton from 'primevue/skeleton'
 import InfiniteLoading from 'v3-infinite-loading'
-import { onBeforeMount, ref } from 'vue'
+import { ref } from 'vue'
 import { toast } from 'vue3-toastify'
 
 import PostVue from '@/components/Post/Post.vue'
 import { Friend, Post } from '@/database'
+import { Logger } from '@/helpers/logger'
 import { usePost } from '@/stores/post'
 import { useUser } from '@/stores/user'
 import { Privacy } from '@/types'
@@ -30,11 +31,6 @@ const { cuser } = storeToRefs(useUser())
 const { posts } = storeToRefs(usePost())
 const lastDoc = ref<number>(0)
 const privacyMode = ref<any[]>([Privacy.PUBLIC])
-
-onBeforeMount(() => {
-  lastDoc.value = 0
-  posts.value = []
-})
 
 const load = async ($state: any) => {
   try {
@@ -66,7 +62,7 @@ const load = async ($state: any) => {
     }
     lastDoc.value = posts.value.length
   } catch (error) {
-    console.log(error)
+    Logger.error('Error while loading posts', error)
     $state!.error()
   }
 }

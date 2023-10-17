@@ -1,33 +1,39 @@
 <script setup lang="ts">
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged, type User as UserAuth } from 'firebase/auth'
 import Card from 'primevue/card'
-import { ref } from 'vue'
+import { onMounted } from 'vue'
 
 import { User } from '@/database'
+import { Logger } from '@/helpers/logger'
 import NonVerifyLayout from '@/layouts/NonVerifyLayout.vue'
 import router from '@/router'
 import { auth } from '@/shared/firebase'
 
-const load = ref(0)
+onMounted(() => {
+  onAuthStateChanged(auth, async (userAuth) => {
+    async function reload(_userAuth: UserAuth) {
+      await _userAuth?.reload()
+      Logger.info('reload', _userAuth)
+      const user = await User.get({ authid: _userAuth.uid })
+      if (!user) {
+        Logger.info('checkpoint', 'user not found')
+        return router.push({ name: 'login' })
+      }
 
-onAuthStateChanged(auth, async (userAuth) => {
-  async function reload(_userAuth: any = auth.currentUser) {
-    await _userAuth?.reload()
-    const user = await User.get({ authid: _userAuth.uid })
-    if (!user) {
-      return router.push({ name: 'login' })
+      if (_userAuth.emailVerified) {
+        Logger.info('checkpoint', 'email verified')
+        if (!user.verified) {
+          Logger.info('checkpoint', 'update user')
+          await User.update({ authid: _userAuth.uid, verified: _userAuth.emailVerified })
+        }
+        Logger.info('checkpoint', 'redirect to dashboard')
+        return router.push({ name: 'dashboard' })
+      }
+      Logger.info('checkpoint', _userAuth.emailVerified, user.verified)
+      setTimeout(reload, 1000, _userAuth)
     }
-    load.value++
-    if (_userAuth.emailVerified === true && !user.verified) {
-      await User.update({ authid: _userAuth.uid, verified: _userAuth.emailVerified })
-      return router.push({ name: 'dashboard' })
-    } else {
-      setTimeout(reload, 3000, _userAuth)
-    }
-  }
-  if (userAuth) {
-    reload()
-  }
+    if (userAuth) reload(userAuth)
+  })
 })
 </script>
 <template>
@@ -38,7 +44,9 @@ onAuthStateChanged(auth, async (userAuth) => {
           <span>Đang chờ xác thực email</span>
         </div>
       </template>
-      <template #subtitle> <div class="py-3"></div> </template>
+      <template #subtitle>
+        <div class="py-3"></div>
+      </template>
       <template #content>
         <div class="text-xl text-gray-700 pb-5">
           <p>Chúng tôi đã gửi một email xác nhận đến hộp thư của bạn.</p>

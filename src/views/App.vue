@@ -47,5 +47,5 @@ onMounted(async () => {
 </script>
 
 <template>
-  <router-view :key="$route.name!" />
+  <router-view :key="`${String($route.name)}|${$route.path}`" />
 </template>
