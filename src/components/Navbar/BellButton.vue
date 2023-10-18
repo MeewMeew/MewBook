@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
-import { formatTimeAgo, useTitle } from '@vueuse/core'
+import { formatTimeAgo } from '@vueuse/core'
+import { useMemoize } from '@vueuse/core'
 //@ts-ignore
 import { useSound } from '@vueuse/sound'
 import { uniqBy } from 'lodash'
@@ -10,7 +11,7 @@ import Badge from 'primevue/badge'
 import Button from 'primevue/button'
 import Skeleton from 'primevue/skeleton'
 import InfiniteLoading from 'v3-infinite-loading'
-import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import Bell from '@/components/Icons/Navbar/Bell.vue'
 import { Attachment } from '@/database'
@@ -34,10 +35,13 @@ const { cuser } = storeToRefs(useUser())
 const { notiCount } = storeToRefs(useGeneral())
 
 const limit = 5
-const title = useTitle()
 const lastDocument = ref<number>(0)
 const notifications = ref<EXINotification[]>([])
 const hasNoti = computed(() => notifications.value.length > 0)
+
+const getUser = useMemoize((uid: number) => {
+  return User.get({ id: uid })
+})
 
 const updateReadState = async (nid: string) => {
   await Notification.read(nid)
@@ -65,11 +69,16 @@ const loadNotifications = async function ($state: InfiniteState) {
     })) as EXINotification[]
 
     for (let item of data) {
-      const user = await User.get({ id: item.data.uid })
-      if (!user) continue
+      const user = await getUser(item.data.uid)
+      if (!user) {
+        Logger.error('Bell user not found', item)
+        await Notification.remove(item.nid)
+        data = data.filter((n) => n.nid !== item.nid)
+        continue
+      }
       if (Attachment.isID(user.photoURL)) {
         const attachment = await Attachment.get(user.photoURL)
-        user.photoURL = await Attachment.image(attachment.attachments.medium)
+        user.photoURL = await Attachment.cacheImage(attachment.attachments.medium)
       }
       item.user = user
     }
@@ -93,20 +102,16 @@ const getReaction = (name: ReactionType) => {
   return REACTIONS.find((r) => r.name === name)
 }
 
-onMounted(async () => {
-  if (notiCount.value > 0) {
-    title.value = `(${notiCount.value}) Mewbook`
-  }
+onMounted(() => {
+  Logger.info('Bell mounted', notifications.value)
 
   mewSocket.on(SEvent.NOTIFICATION_CREATE, async (data: INotification) => {
     const user = await User.get({ id: data.data.uid })
     if (!user) return
     if (Attachment.isID(user.photoURL)) {
       const attachment = await Attachment.get(user.photoURL)
-      user.photoURL = await Attachment.image(attachment.attachments.medium)
+      user.photoURL = await Attachment.cacheImage(attachment.attachments.medium)
     }
-
-    title.value = `(${++notiCount.value}) Mewbook`
     play()
 
     notifications.value.unshift({ ...data, user })
@@ -126,18 +131,6 @@ onMounted(async () => {
     }
   })
 })
-
-onUnmounted(() => {
-  title.value = 'Mewbook'
-})
-
-onUpdated(() => {
-  if (notiCount.value > 0) {
-    title.value = `(${notiCount.value}) Mewbook`
-  } else {
-    title.value = 'Mewbook'
-  }
-})
 </script>
 
 <template>
@@ -147,7 +140,7 @@ onUpdated(() => {
     >
       <Bell size="22" :fill="open" />
       <Badge
-        v-if="notiCount > 0"
+        v-show="notiCount > 0"
         :value="notiCount"
         class="absolute -top-1 -right-1"
         severity="danger"

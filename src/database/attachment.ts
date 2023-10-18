@@ -1,3 +1,4 @@
+import { useMemoize } from '@vueuse/core'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
 
@@ -46,6 +47,10 @@ export class Attachment {
         return resolve(`${import.meta.env.VITE_API_URL}/a/${id}`)
       })
     })
+  }
+
+  public static get cacheImage() {
+    return useMemoize(async (id: string) => await Attachment.image(id))
   }
 
   public static blob<T>(dataURL: string): T {

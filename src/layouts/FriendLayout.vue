@@ -7,7 +7,7 @@ import MainNavLayout from '@/layouts/MainNavLayout.vue'
       <div class="hidden h-full bg-white w-1/4 shadow-xl mt-4 p-4 md:flex flex-col min-w-[380px]">
         <slot name="sidebar"></slot>
       </div>
-      <div class="w-full mt-4">
+      <div class="w-full mt-4 overflow-y-scroll">
         <slot name="view"></slot>
       </div>
     </div>

@@ -54,7 +54,7 @@ const crop = async () => {
 
     if (Attachment.isID(post.attachment as string)) {
       const attachment = await Attachment.get(post.attachment as string)
-      cuser.value!.photoURL = await Attachment.image(attachment.attachments.large)
+      cuser.value!.photoURL = await Attachment.cacheImage(attachment.attachments.large)
       post.attachment = attachment.attachments
     }
 

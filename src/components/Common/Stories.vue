@@ -15,7 +15,7 @@ onMounted(async () => {
   if (userDb) {
     if (Attachment.isID(userDb.photoURL)) {
       const attachment = await Attachment.get(userDb.photoURL)
-      userDb.photoURL = await Attachment.image(attachment.attachments.large)
+      userDb.photoURL = await Attachment.cacheImage(attachment.attachments.large)
     }
     user.value = userDb
   }

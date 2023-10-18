@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 import Button from 'primevue/button'
 import Image from 'primevue/image'
@@ -39,6 +40,13 @@ const loading = reactive({
   remove: false
 })
 
+const open = reactive({
+  unfriend: false
+})
+
+const openDialogUF = () => (open.unfriend = true)
+const closeDialogUF = () => (open.unfriend = false)
+
 async function addFriend() {
   try {
     loading.add = true
@@ -67,6 +75,7 @@ async function unfriend() {
   } catch (error) {
     Logger.error(error)
   } finally {
+    closeDialogUF()
     loading.remove = false
   }
 }
@@ -139,12 +148,12 @@ onBeforeMount(async () => {
 
   if (Attachment.isID(user.value?.photoURL!)) {
     const attachment = await Attachment.get(user.value?.photoURL!)
-    user.value!.photoURL = await Attachment.image(attachment.attachments.large)
+    user.value!.photoURL = await Attachment.cacheImage(attachment.attachments.large)
   }
 
   if (Attachment.isID(user.value?.coverURL!)) {
     const attachment = await Attachment.get(user.value?.coverURL!)
-    user.value!.coverURL = await Attachment.image(attachment.attachments.large)
+    user.value!.coverURL = await Attachment.cacheImage(attachment.attachments.large)
   }
 
   mewSocket.on(SEvent.NOTIFICATION_CREATE, (data) => {
@@ -256,12 +265,62 @@ onBeforeMount(async () => {
             class="space-x-2"
             size="small"
             :loading="loading.remove"
-            @click="unfriend"
+            @click="openDialogUF"
           >
             <i v-if="loading.remove" class="pi pi-spin pi-spinner"></i>
             <img v-else src="/icons/friend/is-friend.png" class="invert w-4 h-4" />
             <span class="font-medium text-[16px]">Bạn bè</span>
           </Button>
+          <TransitionRoot appear :show="open.unfriend" as="template">
+            <Dialog as="div" @close="closeDialogUF" class="relative z-10">
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <div class="fixed inset-0 bg-black bg-opacity-25" />
+              </TransitionChild>
+
+              <div class="fixed inset-0 overflow-y-auto">
+                <div class="flex min-h-full items-center justify-center p-4 text-center">
+                  <TransitionChild
+                    as="template"
+                    enter="duration-300 ease-out"
+                    enter-from="opacity-0 scale-95"
+                    enter-to="opacity-100 scale-100"
+                    leave="duration-200 ease-in"
+                    leave-from="opacity-100 scale-100"
+                    leave-to="opacity-0 scale-95"
+                  >
+                    <DialogPanel
+                      class="w-full max-w-[550px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+                    >
+                      <DialogTitle
+                        as="h3"
+                        class="text-lg font-medium leading-6 text-gray-900 text-center border-b pb-4"
+                      >
+                        Huỷ kết bạn với {{ user.displayName }}
+                      </DialogTitle>
+                      <div class="mt-2">
+                        <p class="text-md text-gray-500">
+                          Bạn có chắc muốn huỷ kết bạn với {{ user.displayName }}?
+                        </p>
+                      </div>
+
+                      <div class="mt-4 flex justify-end items-center space-x-2">
+                        <Button label="Huỷ" text @click="closeDialogUF" />
+                        <Button label="Xác nhận" @click="unfriend" />
+                      </div>
+                    </DialogPanel>
+                  </TransitionChild>
+                </div>
+              </div>
+            </Dialog>
+          </TransitionRoot>
           <Button
             v-if="is.requested"
             aria-label="Huỷ lời mời"

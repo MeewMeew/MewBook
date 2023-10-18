@@ -78,12 +78,27 @@ const router = createRouter({
       }
     },
     {
-      path: '/friends',
+      path: '/friend/home',
       name: 'friends',
       component: () => import('@/views/Friend/Friends.vue'),
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/friends',
+      name: 'fall',
+      component: () => import('@/views/Friend/AllFriend.vue'),
+      meta: {
+        requiresAuth: true
+      },
+      children: [
+        {
+          path: ':id',
+          name: 'fall-view',
+          component: () => import('@/views/User/User.vue')
+        }
+      ]
     },
     {
       path: '/friends/request',

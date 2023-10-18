@@ -41,7 +41,7 @@ const menuItems = ref([
 onMounted(async () => {
   if (Attachment.isID(comment.value.user.photoURL)) {
     const attachment = await Attachment.get(comment.value.user.photoURL)
-    profilePhoto.value = await Attachment.image(attachment.attachments.large)
+    profilePhoto.value = await Attachment.cacheImage(attachment.attachments.large)
   }
 })
 </script>

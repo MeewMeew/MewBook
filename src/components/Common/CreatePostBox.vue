@@ -13,7 +13,7 @@ onMounted(async () => {
   if (!cuser.value) return
   if (Attachment.isID(cuser.value.photoURL)) {
     const attachment = await Attachment.get(cuser.value.photoURL)
-    cuser.value.photoURL = await Attachment.image(attachment.attachments.large)
+    cuser.value.photoURL = await Attachment.cacheImage(attachment.attachments.large)
   }
 })
 </script>

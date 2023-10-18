@@ -1,9 +1,8 @@
 import { io } from 'socket.io-client'
 
+import { Logger } from '@/helpers/logger'
 import { apiURL } from '@/shared/config'
 import { type MewBookClient } from '@/types/socket'
-
-import { Logger } from './logger'
 
 export const mewSocket: MewBookClient = io(`${apiURL}/mewbook`)
 

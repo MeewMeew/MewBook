@@ -35,12 +35,18 @@ async function loadContacts() {
         if (user) {
           if (Attachment.isID(user.photoURL)) {
             const attachment = await Attachment.get(user.photoURL)
-            user.photoURL = await Attachment.image(attachment.attachments.medium)
+            user.photoURL = await Attachment.cacheImage(attachment.attachments.medium)
             _friends.push(user)
           }
         }
       }
       friends.value = _friends
+      // sort by isOnline
+      friends.value.sort((a, b) => {
+        if (a.isOnline && !b.isOnline) return -1
+        if (!a.isOnline && b.isOnline) return 1
+        return 0
+      })
 
       const receiveID = res.received.pop()
       if (receiveID) {
@@ -48,7 +54,7 @@ async function loadContacts() {
         if (user) {
           if (Attachment.isID(user.photoURL)) {
             const attachment = await Attachment.get(user.photoURL)
-            user.photoURL = await Attachment.image(attachment.attachments.medium)
+            user.photoURL = await Attachment.cacheImage(attachment.attachments.medium)
             receive.value = user
           }
         }
@@ -92,6 +98,22 @@ async function rejectRequest(id: number) {
 
 onMounted(async () => {
   await loadContacts()
+
+  mewSocket.on(SEvent.FRIEND_OFFLINE, async (id: number) => {
+    const index = friends.value.findIndex((i) => i.id === id)
+    if (index !== -1) {
+      Logger.info('FRIEND_OFFLINE', id)
+      friends.value[index].isOnline = false
+    }
+  })
+
+  mewSocket.on(SEvent.FRIEND_ONLINE, async (id: number) => {
+    const index = friends.value.findIndex((i) => i.id === id)
+    if (index !== -1) {
+      Logger.info('FRIEND_ONLINE', id)
+      friends.value[index].isOnline = true
+    }
+  })
 })
 </script>
 <template>
@@ -128,6 +150,7 @@ onMounted(async () => {
             <div class="relative w-10 h-10 cursor-pointer">
               <img :src="i.photoURL" :alt="i.displayName" class="avatar" />
               <span
+                v-show="i.isOnline"
                 class="bottom-0 left-7 absolute w-3 h-3 bg-green-400 border-2 border-white dark:border-white rounded-full"
               ></span>
             </div>

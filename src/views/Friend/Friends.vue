@@ -36,7 +36,7 @@ async function loadUsers() {
       if (user.id === cuser.value?.id) continue
       if (Attachment.isID(user.photoURL)) {
         const attachment = await Attachment.get(user.photoURL)
-        user.photoURL = await Attachment.image(attachment.attachments.medium)
+        user.photoURL = await Attachment.cacheImage(attachment.attachments.medium)
       }
       if (res.received.includes(user.id.toString())) {
         frequest.value = uniqBy([...frequest.value, user], 'id')
@@ -67,7 +67,7 @@ onMounted(async () => {
           <Setting />
         </div>
       </div>
-      <div class="flex flex-col gap-2 mt-3 select-none transition-all">
+      <div class="flex flex-col mt-3 select-none transition-all">
         <router-link
           :to="{ name: 'friends' }"
           class="w-full h-14 hover:bg-zinc-100 rounded-lg flex flex-row justify-start items-center pl-2 duration-300"
@@ -104,6 +104,26 @@ onMounted(async () => {
             <span class="text-md text-mb-gray-2 font-semibold text-center px-3"
               >Lời mời kết bạn</span
             >
+          </div>
+          <i class="pi pi-angle-right text-xl text-mb-gray-2 pr-3" />
+        </router-link>
+        <router-link
+          :to="{ name: 'fall' }"
+          class="w-full h-14 hover:bg-zinc-100 rounded-lg pl-2 duration-300 flex items-center"
+        >
+          <div class="flex flex-row justify-start items-center w-full">
+            <div
+              class="w-9 h-9 rounded-full flex items-center justify-center"
+              :class="[cname === 'frequest' ? 'bg-mb-blue' : 'bg-mb-gray']"
+            >
+              <img
+                src="/icons/friend/all-friend.png"
+                alt="friends"
+                class="w-5 h-5"
+                :class="[cname === 'frequest' ? 'invert' : '']"
+              />
+            </div>
+            <span class="text-md text-mb-gray-2 font-semibold text-center px-3">Tất cả bạn bè</span>
           </div>
           <i class="pi pi-angle-right text-xl text-mb-gray-2 pr-3" />
         </router-link>

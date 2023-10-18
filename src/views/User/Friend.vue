@@ -30,7 +30,7 @@ async function loadFriends() {
       if (f.friends.includes(user.id.toString())) {
         if (Attachment.isID(user.photoURL)) {
           const attachment = await Attachment.get(user.photoURL)
-          user.photoURL = await Attachment.image(attachment.attachments.large)
+          user.photoURL = await Attachment.cacheImage(attachment.attachments.large)
           friends.value.push(user)
         }
       }

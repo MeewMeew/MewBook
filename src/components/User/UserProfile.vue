@@ -32,7 +32,7 @@ onMounted(async () => {
 
   for (const post of posts) {
     if (post.attachment) {
-      const medium = await Attachment.image((post.attachment as IAttachmentItem).large)
+      const medium = await Attachment.cacheImage((post.attachment as IAttachmentItem).large)
       if (images.value.length === 9) break
       else images.value.push({ id: post.id, image: medium })
     }

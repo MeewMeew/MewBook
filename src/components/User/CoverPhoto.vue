@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import Image from 'primevue/image'
-import { type PropType, ref } from 'vue'
+import { computed, type PropType, ref } from 'vue'
 import { toast } from 'vue3-toastify'
 
 import { Attachment, Post } from '@/database'
@@ -26,6 +26,18 @@ const loading = ref<boolean>(false)
 const upload = ref<HTMLInputElement>()
 const imageView = ref<string | null>()
 const imageUpload = ref<File | null>()
+const imageComputed = computed(() => {
+  if (imageUpload.value) {
+    console.log('has image upload')
+    return URL.createObjectURL(imageUpload.value)
+  }
+  if (props.cover) {
+    console.log('has cover')
+    return props.cover
+  }
+  console.log('use default')
+  return Attachment.defaultCover
+})
 
 interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget
@@ -55,7 +67,7 @@ const createPost = async () => {
 
     if (Attachment.isID(post.attachment as string)) {
       const attachment = await Attachment.get(post.attachment as string)
-      const large = await Attachment.image(attachment.attachments.large)
+      const large = await Attachment.cacheImage(attachment.attachments.large)
       cuser.value!.coverURL = large
       post.attachment = attachment.attachments
     }
@@ -76,7 +88,9 @@ const createPost = async () => {
 <template>
   <div class="relative">
     <Image
-      :src="imageView || props.cover || Attachment.defaultCover"
+      aria-placeholder="Ảnh bìa"
+      loading="lazy"
+      :src="imageComputed"
       preview
       :pt="{
         root: {

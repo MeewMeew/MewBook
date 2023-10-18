@@ -47,7 +47,7 @@ async function loadUsers() {
       if (user.id === cuser.value?.id) continue
       if (Attachment.isID(user.photoURL)) {
         const attachment = await Attachment.get(user.photoURL)
-        user.photoURL = await Attachment.image(attachment.attachments.medium)
+        user.photoURL = await Attachment.cacheImage(attachment.attachments.medium)
       }
       if (res.received.includes(user.id.toString())) {
         frequest.value = uniqBy([...frequest.value, user], 'id')

@@ -41,7 +41,7 @@ onMounted(async () => {
 
   for (const post of posts) {
     if (post.attachment) {
-      const medium = await Attachment.image((post.attachment as IAttachmentItem).large)
+      const medium = await Attachment.cacheImage((post.attachment as IAttachmentItem).large)
       if (images.value.length === 9) break
       else images.value.push({ id: post.id, image: medium })
     }
@@ -57,8 +57,8 @@ onMounted(async () => {
       class="flex-cols md:flex w-full max-w-xl justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto"
       v-if="user"
     >
-      <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'" />
-      <UserProfile :user="user" v-else />
+      <!-- <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'" /> -->
+      <UserProfile :user="user" />
     </div>
   </div>
 </template>

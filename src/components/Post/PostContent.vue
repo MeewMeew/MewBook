@@ -29,7 +29,7 @@ const photoImage = ref<string>()
 
 onMounted(async () => {
   if (props.attachment) {
-    photoImage.value = await Attachment.image(props.attachment!.large)
+    photoImage.value = await Attachment.cacheImage(props.attachment!.large)
   }
 })
 </script>

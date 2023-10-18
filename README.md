@@ -27,6 +27,7 @@ Official Website: [https://mb.mew.id.vn](https://mb.mew.id.vn)
 - Receive real-time notifications for updates.
 - Edit your profile, including changing your avatar and cover image.
 - Find and manage your friends.
+- Send messages to your friends.
 - Enjoy a responsive design.
 
 ## Installation

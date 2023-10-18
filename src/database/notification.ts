@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   type DocumentData,
   getDocs,
@@ -11,6 +12,7 @@ import {
   where
 } from 'firebase/firestore'
 import _ from 'lodash'
+import { validate } from 'uuid'
 
 import { Logger } from '@/helpers/logger'
 import { db } from '@/shared/firebase'
@@ -58,5 +60,9 @@ export class Notification {
       Logger.error('Get all notification error', error)
       return []
     }
+  }
+  public static async remove(nid: string) {
+    if (!validate(nid)) return
+    await deleteDoc(doc(db, 'notifications', nid))
   }
 }

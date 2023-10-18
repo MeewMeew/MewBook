@@ -27,7 +27,7 @@ onMounted(async () => {
       const updated = await User.update({ authid: userAuth.uid, isOnline: true })
       if (Attachment.isID(updated.photoURL)) {
         const attachment = await Attachment.get(updated.photoURL)
-        updated.photoURL = await Attachment.image(attachment.attachments.large)
+        updated.photoURL = await Attachment.cacheImage(attachment.attachments.large)
       }
       setUser(updated)
       return mewSocket.emit(SEvent.USER_ONLINE, updated.id)
@@ -35,11 +35,8 @@ onMounted(async () => {
     return router.push({ name: 'login' })
   })
   window.addEventListener('beforeunload', async () => {
-    if (cuser?.uid) {
-      const updated = await User.update({ authid: cuser?.uid, isOnline: false })
-      setUser(updated)
-      mewSocket.emit(SEvent.USER_OFFLINE, cuser.id)
-    }
+    if (performance.navigation.type === 1) return
+    mewSocket.emit(SEvent.USER_OFFLINE, cuser!.id)
   })
 
   if (!cuser) return router.push({ name: 'login' })

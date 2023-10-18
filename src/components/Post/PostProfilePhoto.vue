@@ -27,7 +27,7 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-  photoImage.value = await Attachment.image(props.attachment.large)
+  photoImage.value = await Attachment.cacheImage(props.attachment.large)
 })
 </script>
 

@@ -71,11 +71,11 @@ onMounted(async () => {
   if (!res) return
   if (Attachment.isID(res.photoURL)) {
     const attachment = await Attachment.get(res.photoURL)
-    res.photoURL = await Attachment.image(attachment.attachments.large)
+    res.photoURL = await Attachment.cacheImage(attachment.attachments.large)
   }
   if (Attachment.isID(res.coverURL)) {
     const attachment = await Attachment.get(res.coverURL)
-    res.coverURL = await Attachment.image(attachment.attachments.large)
+    res.coverURL = await Attachment.cacheImage(attachment.attachments.large)
   }
   user.value = res
 })
