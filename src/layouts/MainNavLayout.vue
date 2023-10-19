@@ -17,6 +17,7 @@ import PlaceMarket from '@/components/Icons/Navbar/PlaceMarket.vue'
 import Watch from '@/components/Icons/Navbar/Watch.vue'
 import Plus from '@/components/Icons/Plus.vue'
 import BellButton from '@/components/Navbar/BellButton.vue'
+import { AppName } from '@/shared/constants'
 import { useGeneral } from '@/stores/general'
 import { useUser } from '@/stores/user'
 const { isPostOverlay, isCropperModal } = storeToRefs(useGeneral())
@@ -63,7 +64,7 @@ const props = defineProps({
         <i class="pi pi-search lg:ml-2 lg:p-1 p-2 m-auto text-[#64676B] text-lg" />
         <input
           type="text"
-          placeholder="Tìm kiếm trên Mewbook"
+          :placeholder="`Tìm kiếm trên ${AppName}`"
           class="outline-none border-none h-full bg-transparent pt-[.6rem] pr-[1rem] pb-[.6rem] pl-[.25rem] font-[.9rem] w-full hidden lg:block"
         />
       </div>

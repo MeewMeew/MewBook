@@ -108,3 +108,6 @@ export const defaultFormatTimeMessages2: UseTimeAgoMessages<UseTimeAgoUnitNamesD
   second: (n) => `${n} giây`,
   invalid: ''
 }
+
+export const AppName = 'Mewbook'
+export const AppNameLowerCased = 'mewbook'

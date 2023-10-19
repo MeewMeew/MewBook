@@ -7,6 +7,7 @@ import { User } from '@/database'
 import { Logger } from '@/helpers/logger'
 import NonVerifyLayout from '@/layouts/NonVerifyLayout.vue'
 import router from '@/router'
+import { AppName } from '@/shared/constants'
 import { auth } from '@/shared/firebase'
 
 onMounted(() => {
@@ -53,7 +54,7 @@ onMounted(() => {
           <p>Vui lòng nhấn vào liên kết được gửi để tiến hành xác minh tài khoản.</p>
         </div>
         <div class="text-gray-500 text-center">
-          <span>&copy; 2023 Mewbook</span>
+          <span>&copy; 2023 {{ AppName }}</span>
         </div>
       </template>
     </Card>

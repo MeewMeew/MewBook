@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import { User } from '@/database'
 import { Logger } from '@/helpers/logger'
+import { AppName } from '@/shared/constants'
 import { auth } from '@/shared/firebase'
 
 const router = createRouter({
@@ -15,7 +16,7 @@ const router = createRouter({
       component: () => import('@/views/Auth/Login.vue'),
       meta: {
         requiresAuth: false,
-        title: 'Mewbook Login'
+        title: `${AppName} Login`
       }
     },
     {
@@ -32,7 +33,7 @@ const router = createRouter({
       component: () => import('@/views/Auth/Checkpoint.vue'),
       meta: {
         requiresAuth: true,
-        title: 'Mewbook Checkpoint'
+        title: `${AppName} Checkpoint`
       }
     },
     {
@@ -41,7 +42,7 @@ const router = createRouter({
       component: () => import('@/views/Post/Posts.vue'),
       meta: {
         requiresAuth: true,
-        title: 'Mewbook',
+        title: `${AppName}`,
         requiresVerification: true
       }
     },
@@ -51,7 +52,7 @@ const router = createRouter({
       component: () => import('@/views/Auth/Register.vue'),
       meta: {
         requiresAuth: false,
-        title: 'Mewbook Register'
+        title: `${AppName} Register`
       }
     },
     {
@@ -184,7 +185,7 @@ export function initializeRouter() {
 
   router.afterEach((to) => {
     nextTick(() => {
-      document.title = (to.meta.title as string) || 'Mewbook'
+      document.title = (to.meta.title as string) || AppName
     })
   })
 }
