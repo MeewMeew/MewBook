@@ -68,9 +68,9 @@ async function submit() {
       <div
         class="text-left flex flex-col lg:-mt-10 mb-10 items-center justify-center lg:items-start"
       >
-        <h1 class="text-mb-blue text-7xl font-bold px-6 py-3">mewbook</h1>
+        <h1 class="text-mb-blue text-7xl font-bold px-6 py-3">facebook</h1>
         <h2 class="lg:text-2xl font-normal px-6 text-center text-md lg:text-left w-4/5 lg:w-full">
-          Mewbook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn.
+          Facebook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn.
         </h2>
       </div>
       <div class="w-full md:w-3/5 text-center mx-auto">

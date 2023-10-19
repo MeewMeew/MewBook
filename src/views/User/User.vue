@@ -57,8 +57,8 @@ onMounted(async () => {
       class="flex-cols md:flex w-full max-w-xl justify-between h-[calc(100%-56px)] md:px-0 px-2 mx-auto"
       v-if="user"
     >
-      <!-- <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'" /> -->
-      <UserProfile :user="user" />
+      <router-view :key="($route.params.id as string)" v-if="$route.name !== 'user'" />
+      <UserProfile :user="user" v-else />
     </div>
   </div>
 </template>

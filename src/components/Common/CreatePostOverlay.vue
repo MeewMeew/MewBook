@@ -193,7 +193,7 @@ watch(text, (newValue) => {
               >
                 <i
                   @click="clearImage()"
-                  class="pi pi-times absolute bg-white p-2 m-2 right-2 rounded-full border cursor-pointer text-[#5E6771] text-lg"
+                  class="pi pi-times absolute bg-white pl-2 pt-1 m-2 right-2 rounded-full border cursor-pointer text-[#5E6771] text-lg w-9 h-9"
                 />
                 <img v-if="imageView" class="rounded-lg mx-auto" :src="imageView" />
               </div>
