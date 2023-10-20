@@ -48,7 +48,7 @@ const styleClasses = {
   <button
     :type="props.type"
     :class="[styleClasses[props.bstyle], props.width, props.height]"
-    class="btn-login text-white font-bold rounded-lg focus:outline-none focus:ring text-xl"
+    class="btn-login text-white font-bold rounded-lg focus:outline-none focus:ring"
   >
     <slot></slot>
   </button>

@@ -9,7 +9,6 @@ import TotalButton from '@/components/Common/TotalButton.vue'
 import { User } from '@/database'
 import { Logger } from '@/helpers/logger'
 import GuestLayout from '@/layouts/GuestLayout.vue'
-import { AppName, AppNameLowerCased } from '@/shared/constants'
 import { auth } from '@/shared/firebase'
 import { useUser } from '@/stores/user'
 
@@ -65,79 +64,69 @@ async function submit() {
 
 <template>
   <GuestLayout>
-    <div class="max-w-lg w-full flex flex-col lg:flex-row justify-around items-center">
-      <div
-        class="text-left flex flex-col lg:-mt-10 mb-10 items-center justify-center lg:items-start"
+    <div class="w-full md:w-3/5 text-center mx-auto">
+      <form
+        @submit.prevent="submit"
+        class="form-container bg-white shadow-md rounded-lg py-8 px-6 w-full min-w-[400px]"
       >
-        <h1 class="text-mb-blue text-7xl font-bold px-6 py-3">{{ AppNameLowerCased }}</h1>
-        <h2 class="lg:text-2xl font-normal px-6 text-center text-md lg:text-left w-4/5 lg:w-full">
-          {{ AppName }} giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn.
-        </h2>
-      </div>
-      <div class="w-full md:w-3/5 text-center mx-auto">
-        <form
-          @submit.prevent="submit"
-          class="form-container bg-white shadow-md rounded-lg py-8 px-6 w-full min-w-[400px]"
-        >
-          <div>
-            <TextInput
-              id="email"
-              type="email"
-              class="mt-1 block w-full"
-              v-model="form.email"
-              required
-              autofocus
-              autocomplete="username"
-              placeholder="Email"
-            />
+        <div>
+          <TextInput
+            id="email"
+            type="email"
+            class="mt-1 block w-full"
+            v-model="form.email"
+            required
+            autofocus
+            autocomplete="username"
+            placeholder="Email"
+          />
 
-            <InputError class="mt-2" :message="form.errors.email" />
-          </div>
+          <InputError class="mt-2" :message="form.errors.email" />
+        </div>
 
-          <div class="mt-4">
-            <TextInput
-              id="password"
-              type="password"
-              class="mt-1 block w-full"
-              v-model="form.password"
-              required
-              autocomplete="current-password"
-              placeholder="Mật khẩu"
-            />
+        <div class="mt-4">
+          <TextInput
+            id="password"
+            type="password"
+            class="mt-1 block w-full"
+            v-model="form.password"
+            required
+            autocomplete="current-password"
+            placeholder="Mật khẩu"
+          />
 
-            <InputError class="mt-2" :message="form.errors.password" />
-          </div>
+          <InputError class="mt-2" :message="form.errors.password" />
+        </div>
 
-          <div class="flex items-center justify-center pt-4">
-            <TotalButton
-              class="w-full mb-4"
-              :class="{ 'opacity-25': form.processing }"
-              :disabled="form.processing"
-              bstyle="primary"
-            >
-              Đăng nhập
-            </TotalButton>
-          </div>
+        <div class="flex items-center justify-center pt-4">
+          <TotalButton
+            class="w-full mb-4"
+            :class="{ 'opacity-25': form.processing }"
+            :disabled="form.processing"
+            bstyle="primary"
+          >
+            Đăng nhập
+          </TotalButton>
+        </div>
 
-          <div class="flex items-center justify-center mb-4">
-            <router-link
-              to="/forgot-password"
-              class="hover:underline font-medium text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Quên mật khẩu?
-            </router-link>
-          </div>
-          <div class="border-b border-b-gray-200"></div>
-          <div class="flex items-center justify-center pt-6 pb-2">
-            <router-link
-              to="/register"
-              class="w-full text-center px-5 py-3 text-white bg-[#42B729] hover:bg-[#37A621] text-[20px] font-bold rounded-lg"
-            >
-              Tạo tài khoản
-            </router-link>
-          </div>
-        </form>
-      </div>
+        <div class="flex items-center justify-center mb-4">
+          <router-link
+            :to="{ name: 'forgot' }"
+            class="hover:underline font-medium text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Quên mật khẩu?
+          </router-link>
+        </div>
+        <div class="border-b border-b-gray-200"></div>
+        <div class="flex items-center justify-center pt-6 pb-2">
+          <router-link
+            to="/register"
+            class="w-full text-center px-5 py-3 text-white bg-[#42B729] hover:bg-[#37A621] text-[20px] font-bold rounded-lg"
+          >
+            Tạo tài khoản
+          </router-link>
+        </div>
+      </form>
     </div>
   </GuestLayout>
 </template>

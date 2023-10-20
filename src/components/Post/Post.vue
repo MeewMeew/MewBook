@@ -2,14 +2,16 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { formatTimeAgo } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, type PropType, ref, toRefs } from 'vue'
+import { computed, onMounted, type PropType, ref, toRefs, watch } from 'vue'
+import { toast } from 'vue3-toastify'
 
 import PostActionBar from '@/components/Post/PostActionBar.vue'
 import PostComments from '@/components/Post/PostComments.vue'
 import PostContent from '@/components/Post/PostContent.vue'
 import PostProfilePhoto from '@/components/Post/PostProfilePhoto.vue'
-import { Attachment, User } from '@/database'
+import { Attachment, Post, User } from '@/database'
 import { defaultFormatTimeMessages } from '@/shared/constants'
+import { useGeneral } from '@/stores/general'
 import { useUser } from '@/stores/user'
 import { Privacy } from '@/types'
 import type { IAttachmentItem, IPost, IUser } from '@/types/index'
@@ -44,8 +46,10 @@ const props = defineProps({
 
 const { post, avatar, displayCommentBox, scrollable } = toRefs(props)
 const { cuser } = storeToRefs(useUser())
+const { isPrivacyModal, privacyModalPid } = storeToRefs(useGeneral())
 
 const user = ref<IUser>()
+const privacy = ref<Privacy>(post.value.privacy)
 const showComments = ref(displayCommentBox.value)
 const subnameInfo = computed(() => (!post.value.isNormalPost ? post.value.content : ''))
 const isCurrentUser = computed(() => cuser.value?.id === user.value?.id)
@@ -61,7 +65,8 @@ const menuItems = ref([
     text: 'Quyền riêng tư',
     icon: 'pi pi-fw pi-lock',
     action: () => {
-      // TODO: Change privacy
+      isPrivacyModal.value = true
+      privacyModalPid.value = post.value.pid
     }
   }
 ])
@@ -79,6 +84,20 @@ onMounted(async () => {
   }
   user.value = res
 })
+
+watch(
+  () => isPrivacyModal.value,
+  async (value) => {
+    if (value === false && privacyModalPid.value === post.value.pid) {
+      console.log('update privacy')
+      const _post = await Post.get({ pid: post.value.pid })
+      if (!_post) return
+      privacy.value = _post.privacy
+      privacyModalPid.value = ''
+      toast.success('Cập nhật quyền riêng tư thành công')
+    }
+  }
+)
 </script>
 
 <template>
@@ -108,17 +127,17 @@ onMounted(async () => {
                 }}</span>
               </router-link>
               <img
-                v-if="post.privacy === Privacy.PUBLIC"
+                v-if="privacy === Privacy.PUBLIC"
                 src="/icons/privacy/public.png"
                 class="my-auto w-3 h-3"
               />
               <img
-                v-else-if="post.privacy === Privacy.FRIENDS"
+                v-else-if="privacy === Privacy.FRIENDS"
                 src="/icons/privacy/friends.png"
                 class="my-auto w-3 h-3"
               />
               <img
-                v-else-if="post.privacy === Privacy.PRIVATE"
+                v-else-if="privacy === Privacy.PRIVATE"
                 src="/icons/privacy/private.png"
                 class="my-auto w-3 h-3"
               />

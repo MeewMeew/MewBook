@@ -167,4 +167,8 @@ export class Post {
   public static async delete(pid: string) {
     await deleteDoc(doc(db, 'posts', pid))
   }
+
+  public static async update(pid: string, data: Partial<IPost>) {
+    await setDoc(doc(db, 'posts', pid), data, { merge: true })
+  }
 }

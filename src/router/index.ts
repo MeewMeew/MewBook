@@ -28,6 +28,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/forgot',
+      name: 'forgot',
+      component: () => import('@/views/Auth/ForgotPassword.vue'),
+      meta: {
+        requiresAuth: false,
+        title: `${AppName} Forgot Password`
+      }
+    },
+    {
       path: '/checkpoint',
       name: 'checkpoint',
       component: () => import('@/views/Auth/Checkpoint.vue'),

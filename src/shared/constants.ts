@@ -2,13 +2,6 @@ import type { UseTimeAgoMessages, UseTimeAgoUnitNamesDefault } from '@vueuse/cor
 
 import { Privacy, ReactionType } from '@/types'
 
-export const toBlobUrl = async (base64: string) => {
-  const res = await fetch(base64)
-  const blob = await res.blob()
-  const url = URL.createObjectURL(blob)
-  return url
-}
-
 interface IReactionDefine {
   name: ReactionType
   gif: string
@@ -68,17 +61,20 @@ export const PrivacyOptions = [
   {
     icon: '/icons/privacy/public.png',
     text: 'Công khai',
-    type: Privacy.PUBLIC
+    type: Privacy.PUBLIC,
+    description: 'Bài viết sẽ được hiển thị công khai'
   },
   {
     icon: '/icons/privacy/friends.png',
     text: 'Bạn bè',
-    type: Privacy.FRIENDS
+    type: Privacy.FRIENDS,
+    description: 'Bài viết sẽ được hiển thị cho bạn bè'
   },
   {
     icon: '/icons/privacy/private.png',
     text: 'Riêng tư',
-    type: Privacy.PRIVATE
+    type: Privacy.PRIVATE,
+    description: 'Bài viết sẽ được hiển thị riêng tư'
   }
 ]
 

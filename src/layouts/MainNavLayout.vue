@@ -8,6 +8,7 @@ import Logout from 'vue-material-design-icons/Logout.vue'
 import CreatePostOverlay from '@/components/Common/CreatePostOverlay.vue'
 import CropperModal from '@/components/Common/CropperModal.vue'
 import IconButton from '@/components/Common/IconButton.vue'
+import PrivacyModal from '@/components/Common/PrivacyModal.vue'
 import AppLogo from '@/components/Icons/AppLogo.vue'
 import Bookmark from '@/components/Icons/Bookmark.vue'
 import Friend from '@/components/Icons/Navbar/Friend.vue'
@@ -20,7 +21,7 @@ import BellButton from '@/components/Navbar/BellButton.vue'
 import { AppName } from '@/shared/constants'
 import { useGeneral } from '@/stores/general'
 import { useUser } from '@/stores/user'
-const { isPostOverlay, isCropperModal } = storeToRefs(useGeneral())
+const { isPostOverlay, isCropperModal, isPrivacyModal } = storeToRefs(useGeneral())
 const { cuser } = storeToRefs(useUser())
 
 const showMenu = ref(false)
@@ -196,12 +197,20 @@ const props = defineProps({
   <CreatePostOverlay
     v-if="isPostOverlay"
     @showModal="isPostOverlay = false"
-    @keyup.esc="isPostOverlay = false"
+    @keydown.esc="isPostOverlay = false"
+    tabindex="0"
   />
   <CropperModal
     v-if="isCropperModal"
     @showModal="isCropperModal = false"
     @keyup.esc="isCropperModal = false"
+    tabindex="0"
+  />
+  <PrivacyModal
+    v-if="isPrivacyModal"
+    @showModal="isPrivacyModal = false"
+    @keyup.esc="isPrivacyModal = false"
+    tabindex="0"
   />
 </template>
 

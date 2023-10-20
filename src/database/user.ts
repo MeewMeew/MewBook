@@ -17,9 +17,10 @@ import type { Gender, IUser } from '@/types'
 type PartialWithRequired<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>
 
 interface GetUserOptions {
-  id?: number
-  uid?: string
-  authid?: string
+  id: number
+  uid: string
+  authid: string
+  email: string
 }
 
 interface SetAvatarOptions {
@@ -41,16 +42,19 @@ export class User {
       | PartialWithRequired<GetUserOptions, 'id'>
       | PartialWithRequired<GetUserOptions, 'uid'>
       | PartialWithRequired<GetUserOptions, 'authid'>
+      | PartialWithRequired<GetUserOptions, 'email'>
   ) {
     try {
-      if (!options.id && !options.uid && !options.authid) {
+      if (!options.id && !options.uid && !options.authid && !options.email) {
         return null
       }
-      if (options.id || options.authid) {
+      if (options.id || options.authid || options.email) {
         const userRef = collection(db, 'users')
         const condition = options.id
           ? where('id', '==', options.id)
-          : where('authid', '==', options.authid)
+          : options.email
+            ? where('email', '==', options.email)
+            : where('authid', '==', options.authid)
         const userQuery = query(userRef, condition)
         const userSnap = await getDocs(userQuery)
         const firstUserDoc = userSnap.docs[0]

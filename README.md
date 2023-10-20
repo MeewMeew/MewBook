@@ -20,6 +20,7 @@ Official Website: [https://mb.mew.id.vn](https://mb.mew.id.vn)
 ## Features
 
 - Sign in or register with your email and password.
+- Forgot password.
 - Create and delete posts.
 - Edit and display posts with privacy settings.
 - Upload images.
