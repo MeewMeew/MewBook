@@ -89,7 +89,6 @@ watch(
   () => isPrivacyModal.value,
   async (value) => {
     if (value === false && privacyModalPid.value === post.value.pid) {
-      console.log('update privacy')
       const _post = await Post.get({ pid: post.value.pid })
       if (!_post) return
       privacy.value = _post.privacy

@@ -26,10 +26,12 @@ const props = defineProps({
 })
 
 const photoImage = ref<string>()
+const photoBlurImage = ref<string>()
 
 onMounted(async () => {
   if (props.attachment) {
     photoImage.value = await Attachment.cacheImage(props.attachment!.large)
+    photoBlurImage.value = await Attachment.cacheImage(props.attachment!.medium, true)
   }
 })
 </script>
@@ -42,7 +44,7 @@ onMounted(async () => {
   <div class="w-full" v-if="photoImage">
     <div
       :class="['object-fill w-full bg-no-repeat backdrop-blur-md bg-white/30']"
-      :style="{ backgroundImage: `url('${photoImage}/blur')`, backgroundSize: 'cover' }"
+      :style="{ backgroundImage: `url('${photoBlurImage}')`, backgroundSize: 'cover' }"
     >
       <div class="object-cover flex items-center justify-center" v-if="!open">
         <Image

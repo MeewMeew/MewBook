@@ -1,4 +1,4 @@
-import { useMemoize } from '@vueuse/core'
+import { useStorage } from '@vueuse/core'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
 
@@ -39,18 +39,24 @@ export class Attachment {
     })
   }
 
-  public static async image(id: string) {
+  public static async image(id: string, blur = false) {
     return new Promise<string>((resolve, reject) => {
       mewSocket.emit(SEvent.ATTACHMENT_GET, id, async (error) => {
         if (error) return reject(error)
         Logger.info(`[${SEvent.ATTACHMENT_GET}] ${id}`)
-        return resolve(`${import.meta.env.VITE_API_URL}/a/${id}`)
+        return resolve(`${import.meta.env.VITE_API_URL}/a/${id}${blur ? '/blur' : ''}`)
       })
     })
   }
 
-  public static get cacheImage() {
-    return useMemoize(async (id: string) => await Attachment.image(id))
+  public static async cacheImage(id: string, blur = false) {
+    const cache = useStorage(`attachment-${id}-${blur}`, '')
+    if (cache.value) return cache.value
+    const image = await Attachment.image(id, blur)
+    const base64 = await Attachment.base64(image)
+    cache.value = base64
+    return base64
+    
   }
 
   public static blob<T>(dataURL: string): T {
@@ -60,6 +66,22 @@ export class Attachment {
     const ia = new Uint8Array(ab)
     for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
     return new Blob([ab], { type: mimeString }) as T
+  }
+
+  public static base64(url: string) {
+    return new Promise<string>((resolve, reject) => {
+      fetch(url)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const reader = new FileReader()
+          reader.readAsDataURL(blob)
+          reader.onloadend = () => {
+            const base64data = reader.result
+            resolve(base64data as string)
+          }
+        })
+        .catch(reject)
+    })
   }
 
   public static get defaultCover() {
