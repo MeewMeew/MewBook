@@ -21,7 +21,7 @@
     "@vueuse/firebase": "^8.9.4",
     "@vueuse/integrations": "^10.5.0",
     "@vueuse/sound": "^2.0.1",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "emoji-mart-vue-fast": "^15.0.0",
     "firebase": "^10.4.0",
     "floating-vue": "^2.0.0-beta.24",
